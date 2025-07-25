@@ -63,7 +63,7 @@ namespace IntiGuard.Controllers
 
             if (user != null)
             {
-                if (user.clave == clave) // **IMPORTANT: Replace with password hashing/verification!**
+                if (user.clave == clave) 
                 {
                  
                     TempData["SuccessMessage"] = $"Bienvenido, {user.nombres}!";

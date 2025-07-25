@@ -322,6 +322,7 @@ namespace IntiGuard.Controllers
             };
             return View(confirmationVm);
         }
+
         public class OrderConfirmationViewModel
         {
             public Venta? Venta { get; set; }
