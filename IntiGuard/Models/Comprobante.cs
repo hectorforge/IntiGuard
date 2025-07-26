@@ -4,7 +4,7 @@ namespace IntiGuard.Models
 {
     public class Comprobante
     {
-        [Display(Name = "ID Comprobante")]
+        [Key]
         public int id_comprobante { get; set; }
 
         [Display(Name = "Tipo Comprobante")]

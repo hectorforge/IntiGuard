@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IntiGuard.Models
 {
     public class Usuario
     {
-        [Display(Name = "ID Usuario")]
+        [Key]
         public int id_usuario { get; set; }
 
         [Display(Name = "Nombres")]
@@ -28,11 +29,13 @@ namespace IntiGuard.Models
         [StringLength(255)]
         public string? clave { get; set; }
 
-        [Display(Name = "ID Rol")]
+        //[Display(Name = "ID Rol")]
+        [ForeignKey("Rol")]
         public int id_rol { get; set; }
 
         [Display(Name = "Fecha Registro")]
-        public DateTime fecha_registro { get; set; }
+        public DateTime fecha_registro { get; set; } = DateTime.Now;
+
     }
 }
 

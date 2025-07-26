@@ -5,7 +5,7 @@ namespace IntiGuard.Models
 {
     public class Producto
     {
-        [Display(Name = "ID Producto")]
+        [Key]
         public int id_producto { get; set; }
 
         [Display(Name = "Nombre Producto")]

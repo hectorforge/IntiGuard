@@ -6,13 +6,13 @@ namespace IntiGuard.Models
 {
     public class Venta
     {
-        [Display(Name = "ID Venta")]
+        [Key]
         public int id_venta { get; set; }
 
-        [Display(Name = "ID Usuario")]
+        [ForeignKey("Usuario")]
         public int id_usuario { get; set; }
 
-        [Display(Name = "ID Comprobante")]
+        [ForeignKey("Comprobante")]
         public int id_comprobante { get; set; }
 
         [Display(Name = "Total")]
@@ -21,7 +21,7 @@ namespace IntiGuard.Models
         public decimal total { get; set; }
 
         [Display(Name = "Fecha Venta")]
-        public DateTime fecha_venta { get; set; }
+        public DateTime fecha_venta { get; set; } = DateTime.Now;
 
     }
 }
