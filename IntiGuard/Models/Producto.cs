@@ -5,20 +5,12 @@ namespace IntiGuard.Models
 {
     public class Producto
     {
-        [Key]
-        public int id_producto { get; set; }
+        [Display(Name = "Id Producto")] public int id_producto { get; set; }
 
-        [Display(Name = "Nombre Producto")]
-        [Required(ErrorMessage = "El nombre del producto es obligatorio.")]
-        [StringLength(150)]
-        public string? nombre_producto { get; set; }
+        [Display(Name = "Nombre Producto")] public string? nombre_producto { get; set; }
 
         [Display(Name = "Descripción")]
-        public string? descripcion { get; set; }
-
-        [Display(Name = "Marca")]
-        [StringLength(50)]
-        public string? marca { get; set; }
+        public string? descripcion { get; set; } public string? marca { get; set; }
 
         [Display(Name = "Precio")]
         [Required(ErrorMessage = "El precio es obligatorio.")]

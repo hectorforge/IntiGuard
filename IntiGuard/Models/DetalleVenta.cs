@@ -5,14 +5,11 @@ namespace IntiGuard.Models
 {
     public class DetalleVenta
     {
-        [Key]
-        public int id_detalle_venta { get; set; }
+        [Display(Name = "Id Venta_Detalle")] public int id_detalle_venta { get; set; }
 
-        [ForeignKey("Venta")]
-        public int id_venta { get; set; }
+        [Display(Name = "Venta")] public int id_venta { get; set; }
 
-        [ForeignKey("Producto")]
-        public int id_producto { get; set; }
+        [Display(Name = "Producto")] public int id_producto { get; set; }
 
         [Display(Name = "Cantidad")]
         [Required(ErrorMessage = "La cantidad es obligatoria.")]
@@ -26,8 +23,7 @@ namespace IntiGuard.Models
         public decimal precio_unitario { get; set; }
 
         [Display(Name = "Subtotal")]
-        [NotMapped]
-        public decimal subtotal => cantidad * precio_unitario;
+        [NotMapped] public decimal subtotal => cantidad * precio_unitario;
 
     }
 }

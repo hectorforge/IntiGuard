@@ -6,8 +6,7 @@ namespace IntiGuard.Models
     [Table("rol")]
     public class Rol
     {
-        [Key]
-        public int id_rol { get; set; }
+        [Display(Name = "Id Rol")] public int id_rol { get; set; }
 
         [Display(Name = "Nombre del Rol")]
         [Required(ErrorMessage = "El nombre del rol es obligatorio.")]
