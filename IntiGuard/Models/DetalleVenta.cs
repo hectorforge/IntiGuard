@@ -21,7 +21,6 @@ namespace IntiGuard.Models
 
         [Display(Name = "Precio Unitario")]
         [Required(ErrorMessage = "El precio unitario es obligatorio.")]
-        [Column(TypeName = "decimal(10, 2)")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El precio unitario debe ser mayor que cero.")]
         public decimal precio_unitario { get; set; }
 

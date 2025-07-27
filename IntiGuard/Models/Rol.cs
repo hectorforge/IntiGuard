@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IntiGuard.Models
 {
-    [Table("rol")]
     public class Rol
     {
         [Display(Name = "Id Rol")]

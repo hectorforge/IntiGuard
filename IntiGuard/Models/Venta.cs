@@ -19,7 +19,6 @@ namespace IntiGuard.Models
 
         [Display(Name = "Total")]
         [Required(ErrorMessage = "El total es obligatorio.")]
-        [Column(TypeName = "decimal(10, 2)")]
         public decimal total { get; set; }
 
         [Display(Name = "Fecha Venta")]
