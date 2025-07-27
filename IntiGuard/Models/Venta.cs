@@ -6,13 +6,15 @@ namespace IntiGuard.Models
 {
     public class Venta
     {
-        [Key]
+        [Display(Name = "Id Venta")]
         public int id_venta { get; set; }
 
-        [ForeignKey("Usuario")]
+        public virtual ICollection<DetalleVenta> Detalles { get; set; } = new List<DetalleVenta>();
+
+        [Display(Name = "Id Usuario")]
         public int id_usuario { get; set; }
 
-        [ForeignKey("Comprobante")]
+        [Display(Name = "Comprobante")]
         public int id_comprobante { get; set; }
 
         [Display(Name = "Total")]
@@ -22,6 +24,5 @@ namespace IntiGuard.Models
 
         [Display(Name = "Fecha Venta")]
         public DateTime fecha_venta { get; set; } = DateTime.Now;
-
     }
 }

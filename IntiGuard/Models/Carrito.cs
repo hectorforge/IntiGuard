@@ -3,18 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IntiGuard.Models
 {
-    [Table("carrito")] // Maps to the 'carrito' table in the database
     public class Carrito
     {
-        [Key] // Primary Key
         [Display(Name = "ID Carrito")]
         public int id_carrito { get; set; }
 
-        [ForeignKey("Usuario")]
         [Display(Name = "ID Usuario")]
         public int id_usuario { get; set; }
 
-        [ForeignKey("Producto")]
         [Display(Name = "ID Producto")]
         public int id_producto { get; set; }
 
@@ -23,9 +19,7 @@ namespace IntiGuard.Models
         [Display(Name = "Cantidad")]
         public int cantidad { get; set; }
 
-        [ForeignKey("CarritoCompra")]
         [Display(Name = "ID Carrito de Compra")]
-        public int? id_carrito_compra { get; set; } 
-
+        public int? id_carrito_compra { get; set; }
     }
 }
