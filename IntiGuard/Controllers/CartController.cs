@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using IntiGuard.Models; 
+using IntiGuard.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IntiGuard.ViewModel;
 namespace IntiGuard.Controllers
 {
     public class CartController : Controller
