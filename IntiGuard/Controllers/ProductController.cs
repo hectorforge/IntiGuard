@@ -9,7 +9,7 @@ namespace IntiGuard.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly string _connectionString = "server=LAPTOP-U1JQH077-I9; database=TIENDAVIRTUAL;" +
+        private readonly string _connectionString = "server=LAPTOP-U1JQH05L; database=IntiGuardDB;" +
                                                         "Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=false;Encrypt=false";
 
         // Helper to get all products

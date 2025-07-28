@@ -10,7 +10,7 @@ namespace IntiGuard.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly string _connectionString = "server=LAPTOP-U1JQH077-I9; database=TIENDAVIRTUAL;" +
+        private readonly string _connectionString = "server=LAPTOP-U1JQH05L; database=IntiGuardDB;" +
                                                       "Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=false;Encrypt=false";
 
         // This would ideally come from a service/repository layer, not directly in the controller

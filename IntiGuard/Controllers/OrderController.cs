@@ -10,7 +10,7 @@ namespace IntiGuard.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly string _connectionString = "server=LAPTOP-U1JQH077-I9; database=TIENDAVIRTUAL;" +
+        private readonly string _connectionString = "server=LAPTOP-U1JQH05L; database=IntiGuardDB;" +
                                                        "Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=false;Encrypt=false";
 
         // This helper is similar to the one in CartController but returns richer data for checkout

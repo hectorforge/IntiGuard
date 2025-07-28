@@ -9,7 +9,7 @@ namespace IntiGuard.Controllers
 {
     public class CartController : Controller
     {
-        private readonly string _connectionString = "server=LAPTOP-U1JQH05L; database=TIENDAVIRTUAL;" +
+        private readonly string _connectionString = "server=LAPTOP-U1JQH05L; database=IntiGuardDB;" +
                                                         "Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=false;Encrypt=false";
 
         // Helper to get cart items for a user
