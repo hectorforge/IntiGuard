@@ -1,0 +1,120 @@
+﻿@model IntiGuard.Models.Venta
+@{
+    ViewData["Title"] = "Registrar Venta";
+    var productos = ViewBag.Productos as IEnumerable<IntiGuard.Models.Producto>;
+}
+
+<h2>Registrar Venta</h2>
+
+<form asp-action="Create" method="post" id="ventaForm">
+    <div class="form-group">
+        <label>Id Usuario</label>
+        <input asp-for="IdUsuario" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Id Comprobante</label>
+        <input asp-for="IdComprobante" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Total</label>
+        <input asp-for="Total" class="form-control" id="totalVenta" readonly />
+    </div>
+
+    <hr />
+
+    <h4>Detalles de la Venta</h4>
+    <div class="form-inline mb-3">
+        <select id="productoSelect" class="form-control mr-2">
+            <option value="">Seleccione un producto</option>
+            @foreach (var p in productos)
+            {
+                <option value="@p.IdProducto" data-precio="@p.Precio">@p.NombreProducto</option>
+            }
+        </select>
+
+        <input type="number" id="cantidadInput" class="form-control mr-2" placeholder="Cantidad" min="1" />
+
+        <button type="button" id="btnAgregar" class="btn btn-success">Agregar</button>
+    </div>
+
+    <table class="table table-bordered" id="detalleTable">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unit.</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div id="detallesInputs"></div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Cancelar</a>
+</form>
+
+@section Scripts {
+    <script>
+        let detalles = [];
+
+        function actualizarTabla() {
+            let tbody = $("#detalleTable tbody");
+            tbody.empty();
+            let total = 0;
+
+            detalles.forEach((d, i) => {
+                let subtotal = d.cantidad * d.precio;
+                total += subtotal;
+
+                tbody.append(`
+                    <tr>
+                        <td>${d.nombre}</td>
+                        <td>${d.cantidad}</td>
+                        <td>${d.precio.toFixed(2)}</td>
+                        <td>${subtotal.toFixed(2)}</td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${i})">Eliminar</button></td>
+                    </tr>
+                `);
+            });
+
+            $("#totalVenta").val(total.toFixed(2));
+
+            let hiddenInputs = "";
+            detalles.forEach((d, i) => {
+                hiddenInputs += `
+                    <input type="hidden" name="detalles[${i}].IdProducto" value="${d.id}" />
+                    <input type="hidden" name="detalles[${i}].Cantidad" value="${d.cantidad}" />
+                    <input type="hidden" name="detalles[${i}].PrecioUnitario" value="${d.precio}" />
+                `;
+            });
+            $("#detallesInputs").html(hiddenInputs);
+        }
+
+        function eliminarDetalle(index) {
+            detalles.splice(index, 1);
+            actualizarTabla();
+        }
+
+        $("#btnAgregar").click(function () {
+            let idProducto = $("#productoSelect").val();
+            let nombre = $("#productoSelect option:selected").text();
+            let precio = parseFloat($("#productoSelect option:selected").data("precio"));
+            let cantidad = parseInt($("#cantidadInput").val());
+
+            if (!idProducto || cantidad <= 0) {
+                alert("Seleccione un producto y una cantidad válida");
+                return;
+            }
+
+            detalles.push({ id: idProducto, nombre: nombre, precio: precio, cantidad: cantidad });
+            actualizarTabla();
+            $("#productoSelect").val("");
+            $("#cantidadInput").val("");
+        });
+    </script>
+}

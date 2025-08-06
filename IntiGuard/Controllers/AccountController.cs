@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using IntiGuard.Models; 
@@ -254,4 +254,4 @@ namespace IntiGuard.Controllers
             return View(updatedUser);
         }
     }
-}
+}*/

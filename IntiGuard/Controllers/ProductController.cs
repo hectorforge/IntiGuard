@@ -1,4 +1,4 @@
-﻿using IntiGuard.Models;
+﻿/*using IntiGuard.Models;
 using IntiGuard.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -25,3 +25,4 @@ namespace IntiGuard.Controllers
     }
 
 }
+*/

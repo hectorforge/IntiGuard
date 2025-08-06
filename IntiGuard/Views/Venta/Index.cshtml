@@ -1,0 +1,37 @@
+﻿@model IEnumerable<IntiGuard.Models.Venta>
+
+@{
+    ViewData["Title"] = "Ventas";
+}
+
+<h2>Ventas</h2>
+
+<p>
+    <a class="btn btn-primary" href="@Url.Action("Create")">Registrar nueva venta</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Comprobante</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model)
+        {
+            <tr>
+                <td>@v.Cliente</td>
+                <td>@v.TipoComprobante - @v.NumeroComprobante</td>
+                <td>@v.Total.ToString("C")</td>
+                <td>@v.FechaVenta.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a class="btn btn-info" href="@Url.Action("Details", new { id = v.IdVenta })">Detalles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

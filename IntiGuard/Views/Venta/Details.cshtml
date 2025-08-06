@@ -1,0 +1,18 @@
+﻿@model IntiGuard.Models.Venta
+
+@{
+    ViewData["Title"] = "Detalles de la Venta";
+}
+
+<h2>Detalles de la Venta</h2>
+
+<div>
+    <strong>Cliente:</strong> @Model.Cliente <br />
+    <strong>Comprobante:</strong> @Model.TipoComprobante - @Model.NumeroComprobante <br />
+    <strong>Total:</strong> @Model.Total.ToString("C") <br />
+    <strong>Fecha:</strong> @Model.FechaVenta.ToString("dd/MM/yyyy") <br />
+</div>
+
+<p>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Volver</a>
+</p>
