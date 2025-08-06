@@ -5,14 +5,11 @@ namespace IntiGuard.Models
 {
     public class DetalleVenta
     {
-        public int id_detalle_venta { get; set; }
-        public int id_venta { get; set; }
-        public int id_producto { get; set; }
-        public Producto ? Producto { get; set; }
-        public int cantidad { get; set; }
-        public decimal precio_unitario { get; set; }
-        public decimal subtotal => cantidad * precio_unitario;
+        public int IdDetalleVenta { get; set; }
+        public int IdVenta { get; set; }
+        public int IdProducto { get; set; }
+        public string NombreProducto { get; set; } // Para joins
+        public int Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
     }
-
-
 }

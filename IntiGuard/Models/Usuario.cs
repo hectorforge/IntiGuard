@@ -7,19 +7,14 @@ namespace IntiGuard.Models
     public class Usuario
     {
 
-        public int id_usuario { get; set; }
-
-
-        public string? nombres { get; set; }
-
-        public string? apellidos { get; set; }
-
-        public string? correo { get; set; }
-
-        public string? clave { get; set; }
-
-        public int id_rol { get; set; }
-        public DateTime fecha_registro { get; set; } = DateTime.Now;
+        public int IdUsuario { get; set; }
+        public string Nombres { get; set; }
+        public string Apellidos { get; set; }
+        public string Correo { get; set; }
+        public string Clave { get; set; }
+        public int IdRol { get; set; }
+        public string NombreRol { get; set; } // Para joins
+        public DateTime FechaRegistro { get; set; }
     }
 
 }

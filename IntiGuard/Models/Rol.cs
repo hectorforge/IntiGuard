@@ -5,9 +5,8 @@ namespace IntiGuard.Models
 {
     public class Rol
     {
-        public int id_rol { get; set; }
-
-        public string? nombre_rol { get; set; }
+        public int IdRol { get; set; }
+        public string NombreRol { get; set; }
     }
 }
 

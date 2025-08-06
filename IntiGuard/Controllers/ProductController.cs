@@ -16,5 +16,12 @@ namespace IntiGuard.Controllers
         {
             _productoService = productoService;
         }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View(_productoService.GetAll());
+        }
     }
+
 }
