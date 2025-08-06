@@ -1,15 +1,15 @@
 ﻿using IntiGuard.Models;
-using IntiGuard.Services;
+using IntiGuard.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class RolServiceImpl : ICrud<Rol>
+    public class RolCrudImpl : ICrud<Rol>
     {
         private readonly string _connectionString;
 
-        public RolServiceImpl(IConfiguration configuration)
+        public RolCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }

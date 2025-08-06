@@ -140,6 +140,20 @@ BEGIN
 END
 GO
 
+-- Descontar el stock
+CREATE PROCEDURE sp_producto_descontar_stock_transaccion
+    @id_producto INT,
+    @cantidad INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE producto
+    SET stock = stock - @cantidad
+    WHERE id_producto = @id_producto;
+END
+GO
+
 -- ========================================
 -- CONSULTAS ROL
 -- ========================================
@@ -194,6 +208,21 @@ BEGIN
 END
 GO
 
+-- Crear venta inicial
+CREATE PROCEDURE sp_venta_create_transaccion
+    @id_usuario INT,
+    @id_comprobante INT,
+    @total DECIMAL(10,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO venta (id_usuario, id_comprobante, total)
+    VALUES (@id_usuario, @id_comprobante, @total);
+    SELECT SCOPE_IDENTITY() AS id_venta;
+END
+GO
+
 -- ========================================
 -- CONSULTAS DETALLE VENTA
 -- ========================================
@@ -207,5 +236,20 @@ BEGIN
     FROM detalle_venta dv
     INNER JOIN producto p ON dv.id_producto = p.id_producto
     WHERE dv.id_venta = @id_venta;
+END
+GO
+
+-- Insertar detalles inicial
+CREATE PROCEDURE sp_detalle_venta_create_transaccion
+    @id_venta INT,
+    @id_producto INT,
+    @cantidad INT,
+    @precio_unitario DECIMAL(10,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
+    VALUES (@id_venta, @id_producto, @cantidad, @precio_unitario);
 END
 GO

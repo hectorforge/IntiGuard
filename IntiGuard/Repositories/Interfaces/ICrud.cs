@@ -1,4 +1,4 @@
-﻿namespace IntiGuard.Services
+﻿namespace IntiGuard.Repositories.Interfaces
 {
     public interface ICrud<T>
     {

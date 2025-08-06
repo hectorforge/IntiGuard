@@ -1,5 +1,5 @@
-﻿using IntiGuard.Models; 
-using IntiGuard.Services;
+﻿using IntiGuard.Models;
+using IntiGuard.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;

@@ -1,15 +1,15 @@
 ﻿using IntiGuard.Models;
-using IntiGuard.Services;
+using IntiGuard.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class VentaServiceImpl : ICrud<Venta>
+    public class VentaCrudImpl : IVentaCrud
     {
         private readonly string _connectionString;
 
-        public VentaServiceImpl(IConfiguration configuration)
+        public VentaCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
@@ -81,6 +81,19 @@ namespace IntiGuard.Repositories
         public bool ExistsById(int id)
         {
             return GetById(id) != null;
+        }
+
+        // Para las transacciones
+        public int InsertVentaTransaccion(Venta venta, SqlConnection connection, SqlTransaction transaction)
+        {
+            using var cmd = new SqlCommand("sp_venta_create_transaccion", connection, transaction);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@id_usuario", venta.IdUsuario);
+            cmd.Parameters.AddWithValue("@id_comprobante", venta.IdComprobante);
+            cmd.Parameters.AddWithValue("@total", venta.Total);
+
+            object result = cmd.ExecuteScalar();
+            return Convert.ToInt32(result);
         }
     }
 }

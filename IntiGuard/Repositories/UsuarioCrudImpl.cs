@@ -1,15 +1,15 @@
 ﻿using IntiGuard.Models;
-using IntiGuard.Services;
+using IntiGuard.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class UsuarioServiceImpl : ICrud<Usuario>
+    public class UsuarioCrudImpl : ICrud<Usuario>
     {
         private readonly string _connectionString;
 
-        public UsuarioServiceImpl(IConfiguration configuration)
+        public UsuarioCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }

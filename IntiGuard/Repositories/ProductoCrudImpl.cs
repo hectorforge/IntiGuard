@@ -1,15 +1,15 @@
 ﻿using IntiGuard.Models;
-using IntiGuard.Services;
+using IntiGuard.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class ProductoServiceImpl : ICrud<Producto>
+    public class ProductoCrudImpl : IProductoCrud
     {
         private readonly string _connectionString;
 
-        public ProductoServiceImpl(IConfiguration configuration)
+        public ProductoCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
@@ -116,6 +116,17 @@ namespace IntiGuard.Repositories
         public bool ExistsById(int id)
         {
             return GetById(id) != null;
+        }
+
+        // Para las transacciones
+        public void DescontarStockTransaccion(int idProducto, int cantidad, SqlConnection connection, SqlTransaction transaction)
+        {
+            using var cmd = new SqlCommand("sp_producto_descontar_stock_transaccion", connection, transaction);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@id_producto", idProducto);
+            cmd.Parameters.AddWithValue("@cantidad", cantidad);
+
+            cmd.ExecuteNonQuery();
         }
     }
 }

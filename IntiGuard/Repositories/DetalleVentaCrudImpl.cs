@@ -1,15 +1,15 @@
 ﻿using IntiGuard.Models;
-using IntiGuard.Services;
+using IntiGuard.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class DetalleVentaServiceImpl : ICrud<DetalleVenta>
+    public class DetalleVentaCrudImpl : IDetalleVentaCrud
     {
         private readonly string _connectionString;
 
-        public DetalleVentaServiceImpl(IConfiguration configuration)
+        public DetalleVentaCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
@@ -68,5 +68,19 @@ namespace IntiGuard.Repositories
         {
             throw new NotImplementedException("No hay validación directa para existencia de detalles.");
         }
+
+        // Para las transacciones
+        public void InsertDetalleVentaTransaccion(DetalleVenta detalle, SqlConnection connection, SqlTransaction transaction)
+        {
+            using var cmd = new SqlCommand("sp_detalle_venta_create_transaccion", connection, transaction);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@id_venta", detalle.IdVenta);
+            cmd.Parameters.AddWithValue("@id_producto", detalle.IdProducto);
+            cmd.Parameters.AddWithValue("@cantidad", detalle.Cantidad);
+            cmd.Parameters.AddWithValue("@precio_unitario", detalle.PrecioUnitario);
+
+            cmd.ExecuteNonQuery();
+        }
+
     }
 }

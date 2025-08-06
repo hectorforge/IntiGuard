@@ -1,13 +1,24 @@
-using IntiGuard.Services;
+using IntiGuard.Models;
 using IntiGuard.Repositories;
+using IntiGuard.Repositories.Interfaces;
+using IntiGuard.Services.Implements;
+using IntiGuard.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IProductoService, ProductoServiceImpl>();
-builder.Services.AddScoped<IUsuarioService, UsuarioServiceImpl>();
-builder.Services.AddScoped<IRolService, RolServiceImpl>();
-builder.Services.AddScoped<IComprobanteService, ComprobanteServiceImpl>();
+
+// Para inyectar los repositorios en los servicios
+builder.Services.AddScoped<IDetalleVentaCrud, DetalleVentaCrudImpl>();
+builder.Services.AddScoped<IProductoCrud, ProductoCrudImpl>();
+builder.Services.AddScoped<IVentaCrud, VentaCrudImpl>();
+
+builder.Services.AddScoped<ICrud<Comprobante>, ComprobanteCrudImpl>();
+builder.Services.AddScoped<ICrud<Rol>, RolCrudImpl>();
+builder.Services.AddScoped<ICrud<Usuario>, UsuarioCrudImpl>();
+
+// Para inyectar los servicios en los controladores
+builder.Services.AddScoped<IVentaService, VentaServiceImpl>();
 
 var app = builder.Build();
 

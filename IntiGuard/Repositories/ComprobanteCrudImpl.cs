@@ -1,15 +1,15 @@
 ﻿using IntiGuard.Models;
-using IntiGuard.Services;
+using IntiGuard.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class ComprobanteServiceImpl : ICrud<Comprobante>
+    public class ComprobanteCrudImpl : ICrud<Comprobante>
     {
         private readonly string _connectionString;
 
-        public ComprobanteServiceImpl(IConfiguration configuration)
+        public ComprobanteCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
