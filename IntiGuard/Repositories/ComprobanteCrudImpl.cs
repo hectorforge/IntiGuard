@@ -11,7 +11,7 @@ namespace IntiGuard.Repositories
 
         public ComprobanteCrudImpl(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
 
         public Comprobante Create(Comprobante entity)

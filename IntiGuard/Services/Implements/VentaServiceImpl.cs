@@ -2,6 +2,7 @@
 using IntiGuard.Repositories.Interfaces;
 using IntiGuard.Services.Interfaces;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace IntiGuard.Services.Implements
@@ -19,7 +20,7 @@ namespace IntiGuard.Services.Implements
             IProductoCrud productoCrud,
             IDetalleVentaCrud detalleCrud)
         {
-            _connectionString = config.GetConnectionString("DefaultConnection");
+            _connectionString = config.GetConnectionString("IntiGuardDB");
             _ventaCrud = ventaCrud;
             _productoCrud = productoCrud;
             _detalleCrud = detalleCrud;

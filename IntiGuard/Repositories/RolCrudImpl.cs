@@ -11,7 +11,7 @@ namespace IntiGuard.Repositories
 
         public RolCrudImpl(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
 
         public Rol Create(Rol entity)

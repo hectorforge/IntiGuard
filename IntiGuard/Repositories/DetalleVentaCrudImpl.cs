@@ -11,7 +11,7 @@ namespace IntiGuard.Repositories
 
         public DetalleVentaCrudImpl(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
 
         public DetalleVenta Create(DetalleVenta entity)

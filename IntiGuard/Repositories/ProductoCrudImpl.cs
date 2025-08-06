@@ -11,7 +11,7 @@ namespace IntiGuard.Repositories
 
         public ProductoCrudImpl(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
 
         public Producto Create(Producto entity)

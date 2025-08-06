@@ -11,7 +11,7 @@ namespace IntiGuard.Repositories
 
         public UsuarioCrudImpl(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
 
         public Usuario Create(Usuario entity)
