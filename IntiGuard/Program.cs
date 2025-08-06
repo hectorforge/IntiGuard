@@ -1,8 +1,10 @@
+using IntiGuard.Services;
+using IntiGuard.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<IProductoService, ProductoServiceImpl>();
 
 var app = builder.Build();
 
