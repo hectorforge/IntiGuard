@@ -1,0 +1,17 @@
+﻿@model IntiGuard.Models.Comprobante
+
+@{
+    ViewData["Title"] = "Detalle del Comprobante";
+}
+
+<h2>Detalle del Comprobante</h2>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>ID:</strong> @Model.IdComprobante</p>
+        <p><strong>Tipo:</strong> @Model.TipoComprobante</p>
+        <p><strong>Número:</strong> @Model.NumeroComprobante</p>
+    </div>
+</div>
+
+<a class="btn btn-secondary" asp-controller="Comprobante" asp-action="Index">Volver a la lista</a>

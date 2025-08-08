@@ -6,5 +6,6 @@ namespace IntiGuard.Repositories.Interfaces
     public interface IDetalleVentaCrud : ICrud<DetalleVenta>
     {
         void InsertDetalleVentaTransaccion(DetalleVenta detalle, SqlConnection connection, SqlTransaction transaction);
+        IEnumerable<DetalleVenta> GetByVentaId(int idVenta);
     }
 }
