@@ -2,7 +2,6 @@
 using IntiGuard.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace IntiGuard.Controllers
 {
     public class ProductoController : Controller

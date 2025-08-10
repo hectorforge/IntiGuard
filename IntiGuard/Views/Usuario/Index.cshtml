@@ -1,0 +1,41 @@
+﻿@model IEnumerable<IntiGuard.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Lista de Usuarios";
+}
+
+<h2>Lista de Usuarios</h2>
+
+<p>
+    <a asp-action="Create">Crear Nuevo Usuario</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Fecha Registro</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombres</td>
+                <td>@item.Apellidos</td>
+                <td>@item.Correo</td>
+                <td>@item.NombreRol</td>
+                <td>@item.FechaRegistro.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdUsuario">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IdUsuario">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdUsuario">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<IntiGuard.Models.Producto>
+
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<h2>Lista de Productos</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo Producto</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Marca</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Imagen</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var producto in Model)
+        {
+            <tr>
+                <td>@producto.NombreProducto</td>
+                <td>@producto.Descripcion</td>
+                <td>@producto.Marca</td>
+                <td>@producto.Precio.ToString("C")</td>
+                <td>@producto.Stock</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(producto.ImagenUrl))
+                    {
+                        <img src="@producto.ImagenUrl" width="50" height="50" />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@producto.IdProducto">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@producto.IdProducto">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@producto.IdProducto">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
