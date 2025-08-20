@@ -28,12 +28,11 @@ namespace IntiGuard.Controllers
             {
                 await conn.OpenAsync();
                 var cmd = new SqlCommand(@"
-                                SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion,u.foto,
+                                SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion, u.foto,
                                        u.clave, u.id_rol, r.nombre_rol, u.fecha_registro
                                 FROM usuario u
                                 INNER JOIN rol r ON u.id_rol = r.id_rol
                                 WHERE u.correo = @Correo", conn);
-                cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Parameters.AddWithValue("@Correo", correo);
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -62,21 +61,11 @@ namespace IntiGuard.Controllers
                 ViewBag.Error = "Credenciales inválidas";
                 return View();
             }
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, usuario.Correo),
-                    new Claim(ClaimTypes.Role, usuario.NombreRol),
-                    new Claim("FullName", $"{usuario.Nombres} {usuario.Apellidos}")
-                };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await SignInUser(usuario);
 
             return RedirectToAction("Index", "Home");
         }
-
 
         // ----------------------------------- Logout -----------------------------------
         public async Task<IActionResult> Logout()
@@ -122,16 +111,7 @@ namespace IntiGuard.Controllers
                 insertCmd.ExecuteNonQuery();
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, model.Correo),
-                new Claim(ClaimTypes.Role, model.NombreRol ?? "User"),
-                new Claim("FullName", $"{model.Nombres} {model.Apellidos}")
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await SignInUser(model);
 
             return RedirectToAction("Index", "Home");
         }
@@ -151,20 +131,40 @@ namespace IntiGuard.Controllers
             if (result?.Principal != null)
             {
                 var email = result.Principal.FindFirstValue(ClaimTypes.Email);
-                var nombre = result.Principal.FindFirstValue(ClaimTypes.GivenName);
+                var nombre = result.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "Desconocido";
                 var apellido = result.Principal.FindFirstValue(ClaimTypes.Surname) ?? "Desconocido";
-                var fotoClaim = result.Principal.Claims.FirstOrDefault(c => c.Type.EndsWith("picture"));
+
+                var fotoClaim = result.Principal.Claims.FirstOrDefault(c => c.Type.EndsWith("picture")); 
                 var foto = fotoClaim?.Value ?? "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg";
-                var nombreCompleto = result.Principal.FindFirstValue(ClaimTypes.Name);
+
+                Usuario usuario = null;
 
                 using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
                 {
                     conn.Open();
-                    var checkCmd = new SqlCommand("SELECT COUNT(*) FROM usuario WHERE correo=@Correo", conn);
+                    var checkCmd = new SqlCommand("SELECT * FROM usuario WHERE correo=@Correo", conn);
                     checkCmd.Parameters.AddWithValue("@Correo", email);
-                    int count = (int)checkCmd.ExecuteScalar();
 
-                    if (count == 0)
+                    using (var reader = checkCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            usuario = new Usuario
+                            {
+                                IdUsuario = (int)reader["id_usuario"],
+                                Nombres = reader["nombres"].ToString(),
+                                Apellidos = reader["apellidos"].ToString(),
+                                Correo = reader["correo"].ToString(),
+                                Telefono = reader["telefono"].ToString(),
+                                Direccion = reader["direccion"].ToString(),
+                                Foto = reader["foto"].ToString(),
+                                IdRol = (int)reader["id_rol"],
+                                NombreRol = reader["id_rol"].ToString()
+                            };
+                        }
+                    }
+
+                    if (usuario == null)
                     {
                         var insertCmd = new SqlCommand("sp_usuario_create", conn);
                         insertCmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -178,20 +178,31 @@ namespace IntiGuard.Controllers
                         insertCmd.Parameters.AddWithValue("@id_rol", 2);
                         insertCmd.ExecuteNonQuery();
 
-                        return RedirectToAction("CompleteProfile", new { email });
+                        if (apellido == "Desconocido")
+                            return RedirectToAction("CompleteProfile", new { email });
+
+                        var reloadCmd = new SqlCommand("SELECT * FROM usuario WHERE correo=@Correo", conn);
+                        reloadCmd.Parameters.AddWithValue("@Correo", email);
+                        using var readerReload = reloadCmd.ExecuteReader();
+                        if (readerReload.Read())
+                        {
+                            usuario = new Usuario
+                            {
+                                IdUsuario = (int)readerReload["id_usuario"],
+                                Nombres = readerReload["nombres"].ToString(),
+                                Apellidos = readerReload["apellidos"].ToString(),
+                                Correo = readerReload["correo"].ToString(),
+                                Telefono = readerReload["telefono"].ToString(),
+                                Direccion = readerReload["direccion"].ToString(),
+                                Foto = readerReload["foto"].ToString(),
+                                IdRol = (int)readerReload["id_rol"],
+                                NombreRol = readerReload["id_rol"].ToString()
+                            };
+                        }
                     }
                 }
 
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, email),
-                    new Claim(ClaimTypes.Role, "User")
-                };
-
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                await SignInUser(usuario);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -203,19 +214,41 @@ namespace IntiGuard.Controllers
         [HttpGet]
         public IActionResult CompleteProfile(string email)
         {
-            var model = new Usuario { Correo = email };
-            return View(model);
+            Usuario model = null;
+
+            using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("SELECT nombres, apellidos, correo, telefono, direccion, foto FROM usuario WHERE correo=@Correo", conn);
+                cmd.Parameters.AddWithValue("@Correo", email);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        model = new Usuario
+                        {
+                            Nombres = reader["nombres"].ToString(),
+                            Apellidos = reader["apellidos"].ToString(),
+                            Correo = reader["correo"].ToString(),
+                            Telefono = reader["telefono"].ToString(),
+                            Direccion = reader["direccion"].ToString(),
+                            Foto = reader["foto"].ToString()
+                        };
+                    }
+                }
+            }
+
+            return View(model ?? new Usuario { Correo = email });
         }
-        
+
         [HttpPost]
         public IActionResult CompleteProfile(Usuario model)
         {
             if (!ModelState.IsValid) return View(model);
 
             if (string.IsNullOrEmpty(model.Correo))
-            {
                 return BadRequest("Correo no proporcionado.");
-            }
 
             using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
             {
@@ -227,16 +260,18 @@ namespace IntiGuard.Controllers
                 if (!string.IsNullOrEmpty(model.Clave))
                 {
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Clave);
-                    sql = "UPDATE usuario SET telefono=@Tel, direccion=@Dir, clave=@Clave WHERE correo=@Correo";
+                    sql = "UPDATE usuario SET nombres=@Nom, apellidos=@Ape, telefono=@Tel, direccion=@Dir, clave=@Clave WHERE correo=@Correo";
                     cmd = new SqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@Clave", hashedPassword);
                 }
                 else
                 {
-                    sql = "UPDATE usuario SET telefono=@Tel, direccion=@Dir WHERE correo=@Correo";
+                    sql = "UPDATE usuario SET nombres=@Nom, apellidos=@Ape, telefono=@Tel, direccion=@Dir WHERE correo=@Correo";
                     cmd = new SqlCommand(sql, conn);
                 }
 
+                cmd.Parameters.AddWithValue("@Nom", model.Nombres ?? "");
+                cmd.Parameters.AddWithValue("@Ape", model.Apellidos ?? "");
                 cmd.Parameters.AddWithValue("@Tel", model.Telefono ?? "");
                 cmd.Parameters.AddWithValue("@Dir", model.Direccion ?? "");
                 cmd.Parameters.AddWithValue("@Correo", model.Correo);
@@ -244,10 +279,34 @@ namespace IntiGuard.Controllers
                 cmd.ExecuteNonQuery();
             }
 
+            SignInUser(model).Wait();
+
             return RedirectToAction("Index", "Home");
         }
 
         // ----------------------------------- Access Denied -----------------------------------
         public IActionResult AccessDenied() => View();
+
+        // ----------------------------------- Helper: Firmar sesion con claims completos -----------------------------------
+        private async Task SignInUser(Usuario usuario)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, usuario.Correo),
+                new Claim(ClaimTypes.Role, usuario.NombreRol ?? "User"),
+                new Claim("FullName", $"{usuario.Nombres} {usuario.Apellidos}"),
+                new Claim("Nombres", usuario.Nombres ?? ""),
+                new Claim("Apellidos", usuario.Apellidos ?? ""),
+                new Claim("Foto", usuario.Foto ?? ""),
+                new Claim("Correo", usuario.Correo ?? ""),
+                new Claim("Telefono", usuario.Telefono ?? ""),
+                new Claim("Direccion", usuario.Direccion ?? ""),
+                new Claim("IdRol", usuario.IdRol.ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
     }
 }

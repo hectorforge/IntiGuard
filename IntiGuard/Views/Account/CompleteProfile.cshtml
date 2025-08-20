@@ -1,4 +1,5 @@
 ﻿@model IntiGuard.Models.Usuario
+
 @{
     ViewData["Title"] = "Completar Perfil";
 }
@@ -8,28 +9,63 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h3 class="card-title mb-4 text-center">Completa tu perfil</h3>
+                    <h3 class="card-title mb-4 text-center">Completar Perfil</h3>
 
-                    <form method="post">
+                    <div class="text-center mb-3">
+                        <img src="@Model.Foto" alt="Foto de perfil" class="rounded-circle" style="width:100px;height:100px;object-fit:cover;">
+                    </div>
+
+                    <form asp-action="CompleteProfile" method="post">
                         <input type="hidden" asp-for="Correo" />
 
                         <div class="mb-3">
-                            <label asp-for="Telefono" class="form-label"></label>
+                            <label asp-for="Nombres" class="form-label">Nombres</label>
+                            <input asp-for="Nombres" class="form-control" required />
+                            <span asp-validation-for="Nombres" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Apellidos" class="form-label">Apellidos</label>
+
+                            @Html.TextBoxFor(m => m.Apellidos, new {
+                            @class = "form-control", required = (Model.Apellidos == "Desconocido") ? "required" : null})
+
+                            @if (Model.Apellidos == "Desconocido")
+                            {
+                                <small class="text-muted">Por favor ingresa tu apellido.</small>
+                            }
+                            <span asp-validation-for="Apellidos" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label asp-for="Telefono" class="form-label">Teléfono</label>
                             <input asp-for="Telefono" class="form-control" />
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Direccion" class="form-label"></label>
+                            <label asp-for="Direccion" class="form-label">Dirección</label>
                             <input asp-for="Direccion" class="form-control" />
+                            <span asp-validation-for="Direccion" class="text-danger"></span>
                         </div>
+
+                        @if (Model.Foto == "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg")
+                        {
+                            <div class="mb-3">
+                                <label asp-for="Foto" class="form-label">Nueva URL de Foto</label>
+                                <input asp-for="Foto" class="form-control" placeholder="Ingresa la URL de tu foto" />
+                                <span asp-validation-for="Foto" class="text-danger"></span>
+                            </div>
+                        }
 
                         <div class="mb-3">
-                            <label asp-for="Clave" class="form-label">Crear contraseña (opcional)</label>
-                            <input asp-for="Clave" type="password" class="form-control" />
-                            <small class="text-muted">Solo si quieres iniciar sesión directamente con tu correo y contraseña.</small>
+                            <label asp-for="Clave" class="form-label">Nueva Contraseña (opcional)</label>
+                            <input asp-for="Clave" class="form-control" type="password" />
+                            <span asp-validation-for="Clave" class="text-danger"></span>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                        <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
                     </form>
                 </div>
             </div>
