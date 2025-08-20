@@ -3,6 +3,7 @@ using IntiGuard.Repositories;
 using IntiGuard.Repositories.Interfaces;
 using IntiGuard.Services.Implements;
 using IntiGuard.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     options.CallbackPath = "/signin-google";
+    options.ClaimActions.MapJsonKey("picture", "picture", "url");
 });
 
 // Add services to the container.

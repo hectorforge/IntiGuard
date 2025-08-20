@@ -28,7 +28,7 @@ namespace IntiGuard.Controllers
             {
                 await conn.OpenAsync();
                 var cmd = new SqlCommand(@"
-                                SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion,
+                                SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion,u.foto,
                                        u.clave, u.id_rol, r.nombre_rol, u.fecha_registro
                                 FROM usuario u
                                 INNER JOIN rol r ON u.id_rol = r.id_rol
@@ -48,6 +48,7 @@ namespace IntiGuard.Controllers
                             Correo = reader["correo"].ToString(),
                             Telefono = reader["telefono"].ToString(),
                             Direccion = reader["direccion"].ToString(),
+                            Foto = reader["foto"].ToString(),
                             Clave = reader["clave"].ToString(),
                             IdRol = (int)reader["id_rol"],
                             NombreRol = reader["nombre_rol"].ToString()
@@ -115,6 +116,7 @@ namespace IntiGuard.Controllers
                 insertCmd.Parameters.AddWithValue("@correo", model.Correo);
                 insertCmd.Parameters.AddWithValue("@telefono", model.Telefono ?? "");
                 insertCmd.Parameters.AddWithValue("@direccion", model.Direccion ?? "");
+                insertCmd.Parameters.AddWithValue("@foto", model.Foto ?? "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg");
                 insertCmd.Parameters.AddWithValue("@clave", hashedPassword);
                 insertCmd.Parameters.AddWithValue("@id_rol", model.IdRol ?? 2);
                 insertCmd.ExecuteNonQuery();
@@ -149,7 +151,11 @@ namespace IntiGuard.Controllers
             if (result?.Principal != null)
             {
                 var email = result.Principal.FindFirstValue(ClaimTypes.Email);
-                var nombre = result.Principal.FindFirstValue(ClaimTypes.Name);
+                var nombre = result.Principal.FindFirstValue(ClaimTypes.GivenName);
+                var apellido = result.Principal.FindFirstValue(ClaimTypes.Surname);
+                var fotoClaim = result.Principal.Claims.FirstOrDefault(c => c.Type.EndsWith("picture"));
+                var foto = fotoClaim?.Value ?? "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg";
+                var nombreCompleto = result.Principal.FindFirstValue(ClaimTypes.Name);
 
                 using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
                 {
@@ -163,10 +169,11 @@ namespace IntiGuard.Controllers
                         var insertCmd = new SqlCommand("sp_usuario_create", conn);
                         insertCmd.CommandType = System.Data.CommandType.StoredProcedure;
                         insertCmd.Parameters.AddWithValue("@nombres", nombre);
-                        insertCmd.Parameters.AddWithValue("@apellidos", "");
+                        insertCmd.Parameters.AddWithValue("@apellidos", apellido ?? "Deconocido");
                         insertCmd.Parameters.AddWithValue("@correo", email);
                         insertCmd.Parameters.AddWithValue("@telefono", "");
                         insertCmd.Parameters.AddWithValue("@direccion", "");
+                        insertCmd.Parameters.AddWithValue("@foto", foto);
                         insertCmd.Parameters.AddWithValue("@clave", "");
                         insertCmd.Parameters.AddWithValue("@id_rol", 2);
                         insertCmd.ExecuteNonQuery();
@@ -199,34 +206,8 @@ namespace IntiGuard.Controllers
             var model = new Usuario { Correo = email };
             return View(model);
         }
-
-        // Aqui lo que yo hacia era logar pero nunca pedia una contrseña solo que solo se logea con google sin contraseña
+        
         [HttpPost]
-        public IActionResult CompleteProfile(Usuario model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            if (string.IsNullOrEmpty(model.Correo))
-            {
-                return BadRequest("Correo no proporcionado.");
-            }
-
-            using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
-            {
-                conn.Open();
-                var cmd = new SqlCommand(
-                    "UPDATE usuario SET telefono=@Tel, direccion=@Dir WHERE correo=@Correo", conn);
-                cmd.Parameters.AddWithValue("@Tel", model.Telefono ?? "");
-                cmd.Parameters.AddWithValue("@Dir", model.Direccion ?? "");
-                cmd.Parameters.AddWithValue("@Correo", model.Correo);
-                cmd.ExecuteNonQuery();
-            }
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        /*
-        [HttpPost] // En esta nueva version ya si se logea con google puede hacerlo normal pero tambien por correo y contraseña directamente.
         public IActionResult CompleteProfile(Usuario model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -264,7 +245,7 @@ namespace IntiGuard.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-        }*/
+        }
 
         // ----------------------------------- Access Denied -----------------------------------
         public IActionResult AccessDenied() => View();

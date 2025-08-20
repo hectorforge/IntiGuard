@@ -14,13 +14,21 @@
                         <input type="hidden" asp-for="Correo" />
 
                         <div class="mb-3">
-                            <label for="Telefono" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono">
+                            <label asp-for="Telefono" class="form-label"></label>
+                            <input asp-for="Telefono" class="form-control" />
                         </div>
+
                         <div class="mb-3">
-                            <label for="Direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" id="Direccion" name="Direccion" value="@Model.Direccion">
+                            <label asp-for="Direccion" class="form-label"></label>
+                            <input asp-for="Direccion" class="form-control" />
                         </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Clave" class="form-label">Crear contraseña (opcional)</label>
+                            <input asp-for="Clave" type="password" class="form-control" />
+                            <small class="text-muted">Solo si quieres iniciar sesión directamente con tu correo y contraseña.</small>
+                        </div>
+
                         <button type="submit" class="btn btn-primary w-100">Guardar</button>
                     </form>
                 </div>

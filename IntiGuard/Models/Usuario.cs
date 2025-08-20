@@ -15,6 +15,7 @@ namespace IntiGuard.Models
         // Mas campos para el registro
         public string? Telefono { get; set; }
         public string? Direccion { get; set; }
+        public string? Foto { get; set; }
 
         public string?  Clave { get; set; }
         public int?   IdRol { get; set; }

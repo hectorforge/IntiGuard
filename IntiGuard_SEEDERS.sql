@@ -7,13 +7,13 @@ INSERT INTO rol (nombre_rol) VALUES ('USER');
 GO
 
 -- Insertar usuarios
-INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion,clave,id_rol) 
+INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion,foto,clave,id_rol) 
 VALUES 
-('Gabriel', 'Sánchez', 'gabriel.sanchez@gmail.com','999888763','Matuzalen', 'clave123', 2),
-('César', 'Mendoza', 'cesar.mendoza@gmail.com','910658333','Av los cipreces', 'clave456', 2),
-('Diego', 'Vega', 'diego.vega@gmail.com','987654321','Av pueblo paleta','clave789', 2),
-('Héctor', 'González', 'hector.gonzalez@gmail.com','910658335','Los Angeles','admin1234', 1),
-('Erick', 'Castillo', 'erick.castillo@gmail.com','999888333','Av Imposible', 'admin5678', 1);
+('Gabriel', 'Sánchez', 'gabriel.sanchez@gmail.com','999888763','Matuzalen','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'clave123', 2),
+('César', 'Mendoza', 'cesar.mendoza@gmail.com','910658333','Av los cipreces','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'clave456', 2),
+('Diego', 'Vega', 'diego.vega@gmail.com','987654321','Av pueblo paleta','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg','clave789', 2),
+('Héctor', 'González', 'hector.gonzalez@gmail.com','910658335','Los Angeles','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg','admin1234', 1),
+('Erick', 'Castillo', 'erick.castillo@gmail.com','999888333','Av Imposible','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg', 'admin5678', 1);
 GO
 
 -- Insertar productos
