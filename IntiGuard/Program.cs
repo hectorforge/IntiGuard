@@ -3,9 +3,29 @@ using IntiGuard.Repositories;
 using IntiGuard.Repositories.Interfaces;
 using IntiGuard.Services.Implements;
 using IntiGuard.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuracion para la seguridad
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+})
+.AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    options.CallbackPath = "/signin-google";
+});
+
 // Add services to the container.
+builder.Services.AddAuthorization();
 builder.Services.AddControllersWithViews();
 
 // Para inyectar los repositorios en los servicios
@@ -35,6 +55,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
+app.UseAuthentication(); // antes de authorization importante para q fuincione
 app.UseAuthorization();
 
 app.MapControllerRoute(

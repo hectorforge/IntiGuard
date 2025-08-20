@@ -13,12 +13,14 @@ CREATE PROCEDURE sp_usuario_create
     @nombres VARCHAR(100),
     @apellidos VARCHAR(100),
     @correo VARCHAR(100),
+    @telefono VARCHAR(20),
+    @direccion VARCHAR(100),
     @clave VARCHAR(255),
     @id_rol INT
 AS
 BEGIN
-    INSERT INTO usuario (nombres, apellidos, correo, clave, id_rol)
-    VALUES (@nombres, @apellidos, @correo, @clave, @id_rol);
+    INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion ,clave, id_rol)
+    VALUES (@nombres, @apellidos, @correo,@telefono,@direccion ,@clave, @id_rol);
 END
 GO
 
@@ -26,7 +28,7 @@ GO
 CREATE PROCEDURE sp_usuario_get_all
 AS
 BEGIN
-    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.id_rol, r.nombre_rol, u.fecha_registro
+    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo,u.telefono,u.direccion ,u.id_rol, r.nombre_rol, u.fecha_registro
     FROM usuario u
     INNER JOIN rol r ON u.id_rol = r.id_rol;
 END
@@ -37,7 +39,7 @@ CREATE PROCEDURE sp_usuario_get_by_id
     @id_usuario INT
 AS
 BEGIN
-    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.id_rol, r.nombre_rol, u.fecha_registro
+    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono,u.direccion, u.id_rol, r.nombre_rol, u.fecha_registro
     FROM usuario u
     INNER JOIN rol r ON u.id_rol = r.id_rol
     WHERE u.id_usuario = @id_usuario;
@@ -50,6 +52,8 @@ CREATE PROCEDURE sp_usuario_update
     @nombres VARCHAR(100),
     @apellidos VARCHAR(100),
     @correo VARCHAR(100),
+    @telefono VARCHAR(20),
+    @direccion VARCHAR(100),
     @clave VARCHAR(255),
     @id_rol INT
 AS
@@ -58,6 +62,8 @@ BEGIN
     SET nombres = @nombres,
         apellidos = @apellidos,
         correo = @correo,
+        telefono = @telefono,
+        direccion = @direccion,
         clave = @clave,
         id_rol = @id_rol
     WHERE id_usuario = @id_usuario;

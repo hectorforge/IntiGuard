@@ -2,18 +2,18 @@ USE IntiGuardDB
 GO
 
 -- Insertar roles
-INSERT INTO rol (nombre_rol) VALUES ('USER');
 INSERT INTO rol (nombre_rol) VALUES ('ADMIN');
+INSERT INTO rol (nombre_rol) VALUES ('USER');
 GO
 
 -- Insertar usuarios
-INSERT INTO usuario (nombres, apellidos, correo, clave, id_rol) 
+INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion,clave,id_rol) 
 VALUES 
-('Gabriel', 'Sánchez', 'gabriel.sanchez@gmail.com', 'clave123', 1),
-('César', 'Mendoza', 'cesar.mendoza@gmail.com', 'clave456', 1),
-('Diego', 'Vega', 'diego.vega@gmail.com', 'clave789', 1),
-('Héctor', 'González', 'hector.gonzalez@gmail.com', 'admin1234', 2),
-('Erick', 'Castillo', 'erick.castillo@gmail.com', 'admin5678', 2);
+('Gabriel', 'Sánchez', 'gabriel.sanchez@gmail.com','999888763','Matuzalen', 'clave123', 2),
+('César', 'Mendoza', 'cesar.mendoza@gmail.com','910658333','Av los cipreces', 'clave456', 2),
+('Diego', 'Vega', 'diego.vega@gmail.com','987654321','Av pueblo paleta','clave789', 2),
+('Héctor', 'González', 'hector.gonzalez@gmail.com','910658335','Los Angeles','admin1234', 1),
+('Erick', 'Castillo', 'erick.castillo@gmail.com','999888333','Av Imposible', 'admin5678', 1);
 GO
 
 -- Insertar productos

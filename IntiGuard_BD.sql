@@ -19,6 +19,8 @@ CREATE TABLE usuario (
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
+    telefono VARCHAR(20),
+    direccion VARCHAR(100),
     clave VARCHAR(255),
     id_rol INT NOT NULL,
     fecha_registro DATETIME NOT NULL DEFAULT GETDATE(),

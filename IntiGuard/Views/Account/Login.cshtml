@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-4 text-center">Iniciar Sesión</h3>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="correo" name="correo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clave" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="clave" name="clave" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <hr>
+                    <div class="text-center">
+                        <a class="btn btn-outline-danger w-100" href="@Url.Action("ExternalLogin", "Account", new { provider = "Google" })">
+                            Iniciar sesión con Google
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="@Url.Action("Register", "Account")">¿No tienes cuenta? Regístrate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
