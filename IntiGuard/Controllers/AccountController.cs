@@ -152,7 +152,7 @@ namespace IntiGuard.Controllers
             {
                 var email = result.Principal.FindFirstValue(ClaimTypes.Email);
                 var nombre = result.Principal.FindFirstValue(ClaimTypes.GivenName);
-                var apellido = result.Principal.FindFirstValue(ClaimTypes.Surname);
+                var apellido = result.Principal.FindFirstValue(ClaimTypes.Surname) ?? "Desconocido";
                 var fotoClaim = result.Principal.Claims.FirstOrDefault(c => c.Type.EndsWith("picture"));
                 var foto = fotoClaim?.Value ?? "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg";
                 var nombreCompleto = result.Principal.FindFirstValue(ClaimTypes.Name);
@@ -169,7 +169,7 @@ namespace IntiGuard.Controllers
                         var insertCmd = new SqlCommand("sp_usuario_create", conn);
                         insertCmd.CommandType = System.Data.CommandType.StoredProcedure;
                         insertCmd.Parameters.AddWithValue("@nombres", nombre);
-                        insertCmd.Parameters.AddWithValue("@apellidos", apellido ?? "Deconocido");
+                        insertCmd.Parameters.AddWithValue("@apellidos", apellido);
                         insertCmd.Parameters.AddWithValue("@correo", email);
                         insertCmd.Parameters.AddWithValue("@telefono", "");
                         insertCmd.Parameters.AddWithValue("@direccion", "");
