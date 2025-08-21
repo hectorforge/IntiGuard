@@ -5,7 +5,7 @@ using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class UsuarioCrudImpl : ICrud<Usuario>
+    public class UsuarioCrudImpl : IUsuarioCrud
     {
         private readonly string _connectionString;
 
@@ -20,11 +20,14 @@ namespace IntiGuard.Repositories
             using var cmd = new SqlCommand("sp_usuario_create", connection);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@nombres", entity.Nombres);
-            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos);
-            cmd.Parameters.AddWithValue("@correo", entity.Correo);
-            cmd.Parameters.AddWithValue("@clave", entity.Clave);
-            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol);
+            cmd.Parameters.AddWithValue("@nombres", entity.Nombres ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@correo", entity.Correo ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@telefono", entity.Telefono ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@direccion", entity.Direccion ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@foto", entity.Foto ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@clave", entity.Clave ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol ?? (object)DBNull.Value);
 
             connection.Open();
             cmd.ExecuteNonQuery();
@@ -45,13 +48,17 @@ namespace IntiGuard.Repositories
             {
                 usuario = new Usuario
                 {
-                    IdUsuario = reader.GetInt32(0),
-                    Nombres = reader.GetString(1),
-                    Apellidos = reader.GetString(2),
-                    Correo = reader.GetString(3),
-                    IdRol = reader.GetInt32(4),
-                    NombreRol = reader.GetString(5),
-                    FechaRegistro = reader.GetDateTime(6)
+                    IdUsuario = reader["id_usuario"] as int?,
+                    Nombres = reader["nombres"] as string,
+                    Apellidos = reader["apellidos"] as string,
+                    Correo = reader["correo"] as string,
+                    Telefono = reader["telefono"] as string,
+                    Direccion = reader["direccion"] as string,
+                    Foto = reader["foto"] as string,
+                    Clave = reader["clave"] as string,
+                    IdRol = reader["id_rol"] as int?,
+                    NombreRol = reader["nombre_rol"] as string,
+                    FechaRegistro = reader["fecha_registro"] is DBNull ? null : (DateTime?)reader["fecha_registro"]
                 };
             }
             return usuario;
@@ -70,13 +77,17 @@ namespace IntiGuard.Repositories
             {
                 lista.Add(new Usuario
                 {
-                    IdUsuario = reader.GetInt32(0),
-                    Nombres = reader.GetString(1),
-                    Apellidos = reader.GetString(2),
-                    Correo = reader.GetString(3),
-                    IdRol = reader.GetInt32(4),
-                    NombreRol = reader.GetString(5),
-                    FechaRegistro = reader.GetDateTime(6)
+                    IdUsuario = reader["id_usuario"] as int?,
+                    Nombres = reader["nombres"] as string,
+                    Apellidos = reader["apellidos"] as string,
+                    Correo = reader["correo"] as string,
+                    Telefono = reader["telefono"] as string,
+                    Direccion = reader["direccion"] as string,
+                    Foto = reader["foto"] as string,
+                    Clave = reader["clave"] as string,
+                    IdRol = reader["id_rol"] as int?,
+                    NombreRol = reader["nombre_rol"] as string,
+                    FechaRegistro = reader["fecha_registro"] is DBNull ? null : (DateTime?)reader["fecha_registro"]
                 });
             }
             return lista;
@@ -89,11 +100,14 @@ namespace IntiGuard.Repositories
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@id_usuario", id);
-            cmd.Parameters.AddWithValue("@nombres", entity.Nombres);
-            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos);
-            cmd.Parameters.AddWithValue("@correo", entity.Correo);
-            cmd.Parameters.AddWithValue("@clave", entity.Clave);
-            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol);
+            cmd.Parameters.AddWithValue("@nombres", entity.Nombres ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@correo", entity.Correo ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@telefono", entity.Telefono ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@direccion", entity.Direccion ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@foto", entity.Foto ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@clave", entity.Clave ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol ?? (object)DBNull.Value);
 
             connection.Open();
             cmd.ExecuteNonQuery();
