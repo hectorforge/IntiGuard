@@ -34,7 +34,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDetalleVentaCrud, DetalleVentaCrudImpl>();
 builder.Services.AddScoped<IProductoCrud, ProductoCrudImpl>();
 builder.Services.AddScoped<IVentaCrud, VentaCrudImpl>();
-builder.Services.AddScoped<IUsuarioCrud, UsuarioCrudImpl>(); //
+builder.Services.AddScoped<IUsuarioCrud, UsuarioCrudImpl>(); 
 
 builder.Services.AddScoped<ICrud<Comprobante>, ComprobanteCrudImpl>();
 builder.Services.AddScoped<ICrud<Rol>, RolCrudImpl>();
