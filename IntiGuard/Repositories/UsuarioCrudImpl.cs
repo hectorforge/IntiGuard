@@ -20,14 +20,14 @@ namespace IntiGuard.Repositories
             using var cmd = new SqlCommand("sp_usuario_create", connection);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@nombres", entity.Nombres ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@correo", entity.Correo ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@telefono", entity.Telefono ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@direccion", entity.Direccion ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@foto", entity.Foto ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@clave", entity.Clave ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@nombres", entity.Nombres);
+            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos);
+            cmd.Parameters.AddWithValue("@correo", entity.Correo);
+            cmd.Parameters.AddWithValue("@telefono", entity.Telefono);
+            cmd.Parameters.AddWithValue("@direccion", entity.Direccion);
+            cmd.Parameters.AddWithValue("@foto", entity.Foto);
+            cmd.Parameters.AddWithValue("@clave", entity.Clave);
+            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol);
 
             connection.Open();
             cmd.ExecuteNonQuery();
@@ -100,14 +100,14 @@ namespace IntiGuard.Repositories
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@id_usuario", id);
-            cmd.Parameters.AddWithValue("@nombres", entity.Nombres ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@correo", entity.Correo ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@telefono", entity.Telefono ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@direccion", entity.Direccion ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@foto", entity.Foto ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@clave", entity.Clave ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@nombres", entity.Nombres);
+            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos);
+            cmd.Parameters.AddWithValue("@correo", entity.Correo);
+            cmd.Parameters.AddWithValue("@telefono", entity.Telefono);
+            cmd.Parameters.AddWithValue("@direccion", entity.Direccion);
+            cmd.Parameters.AddWithValue("@foto", entity.Foto);
+            cmd.Parameters.AddWithValue("@clave", entity.Clave);
+            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol);
 
             connection.Open();
             cmd.ExecuteNonQuery();
