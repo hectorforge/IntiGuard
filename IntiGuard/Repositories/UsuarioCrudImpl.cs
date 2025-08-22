@@ -14,24 +14,68 @@ namespace IntiGuard.Repositories
             _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
 
-        public Usuario Create(Usuario entity)
+        public void CreateWithTransaction(Usuario usuario)
         {
             using var connection = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("sp_usuario_create", connection);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@nombres", entity.Nombres);
-            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos);
-            cmd.Parameters.AddWithValue("@correo", entity.Correo);
-            cmd.Parameters.AddWithValue("@telefono", entity.Telefono);
-            cmd.Parameters.AddWithValue("@direccion", entity.Direccion);
-            cmd.Parameters.AddWithValue("@foto", entity.Foto);
-            cmd.Parameters.AddWithValue("@clave", entity.Clave);
-            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol);
-
             connection.Open();
-            cmd.ExecuteNonQuery();
-            return entity;
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                using var cmd = new SqlCommand("sp_usuario_create", connection, transaction);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@nombres", usuario.Nombres ?? "");
+                cmd.Parameters.AddWithValue("@apellidos", usuario.Apellidos ?? "");
+                cmd.Parameters.AddWithValue("@correo", usuario.Correo ?? "");
+                cmd.Parameters.AddWithValue("@telefono", usuario.Telefono ?? "");
+                cmd.Parameters.AddWithValue("@direccion", usuario.Direccion ?? "");
+                cmd.Parameters.AddWithValue("@foto", usuario.Foto ?? "");
+                cmd.Parameters.AddWithValue("@clave", usuario.Clave ?? "");
+                cmd.Parameters.AddWithValue("@id_rol", usuario.IdRol ?? (object)DBNull.Value);
+
+                cmd.ExecuteNonQuery();
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
+
+        public Usuario UpdateWithTransaction(int id, Usuario usuario)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                using var cmd = new SqlCommand("sp_usuario_update", connection, transaction);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@id_usuario", id);
+                cmd.Parameters.AddWithValue("@nombres", usuario.Nombres ?? "");
+                cmd.Parameters.AddWithValue("@apellidos", usuario.Apellidos ?? "");
+                cmd.Parameters.AddWithValue("@correo", usuario.Correo ?? "");
+                cmd.Parameters.AddWithValue("@telefono", usuario.Telefono ?? "");
+                cmd.Parameters.AddWithValue("@direccion", usuario.Direccion ?? "");
+                cmd.Parameters.AddWithValue("@foto", usuario.Foto ?? "");
+                cmd.Parameters.AddWithValue("@clave", usuario.Clave ?? "");
+                cmd.Parameters.AddWithValue("@id_rol", usuario.IdRol ?? (object)DBNull.Value);
+
+                cmd.ExecuteNonQuery();
+
+                transaction.Commit();
+                return usuario;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         public Usuario GetById(int id)
@@ -48,17 +92,16 @@ namespace IntiGuard.Repositories
             {
                 usuario = new Usuario
                 {
-                    IdUsuario = reader["id_usuario"] as int?,
-                    Nombres = reader["nombres"] as string,
-                    Apellidos = reader["apellidos"] as string,
-                    Correo = reader["correo"] as string,
-                    Telefono = reader["telefono"] as string,
-                    Direccion = reader["direccion"] as string,
-                    Foto = reader["foto"] as string,
-                    Clave = reader["clave"] as string,
-                    IdRol = reader["id_rol"] as int?,
-                    NombreRol = reader["nombre_rol"] as string,
-                    FechaRegistro = reader["fecha_registro"] is DBNull ? null : (DateTime?)reader["fecha_registro"]
+                    IdUsuario = reader.GetInt32(0),
+                    Nombres = reader.GetString(1),
+                    Apellidos = reader.GetString(2),
+                    Correo = reader.GetString(3),
+                    Telefono = reader.IsDBNull(4) ? null : reader.GetString(4),
+                    Direccion = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    Foto = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    IdRol = reader.GetInt32(7),
+                    NombreRol = reader.GetString(8),
+                    FechaRegistro = reader.GetDateTime(9)
                 };
             }
             return usuario;
@@ -77,42 +120,23 @@ namespace IntiGuard.Repositories
             {
                 lista.Add(new Usuario
                 {
-                    IdUsuario = reader["id_usuario"] as int?,
-                    Nombres = reader["nombres"] as string,
-                    Apellidos = reader["apellidos"] as string,
-                    Correo = reader["correo"] as string,
-                    Telefono = reader["telefono"] as string,
-                    Direccion = reader["direccion"] as string,
-                    Foto = reader["foto"] as string,
-                    Clave = reader["clave"] as string,
-                    IdRol = reader["id_rol"] as int?,
-                    NombreRol = reader["nombre_rol"] as string,
-                    FechaRegistro = reader["fecha_registro"] is DBNull ? null : (DateTime?)reader["fecha_registro"]
+                    IdUsuario = reader.GetInt32(0),
+                    Nombres = reader.GetString(1),
+                    Apellidos = reader.GetString(2),
+                    Correo = reader.GetString(3),
+                    Telefono = reader.IsDBNull(4) ? null : reader.GetString(4),
+                    Direccion = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    Foto = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    IdRol = reader.GetInt32(7),
+                    NombreRol = reader.GetString(8),
+                    FechaRegistro = reader.GetDateTime(9)
                 });
             }
             return lista;
         }
 
-        public Usuario Update(int id, Usuario entity)
-        {
-            using var connection = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("sp_usuario_update", connection);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@id_usuario", id);
-            cmd.Parameters.AddWithValue("@nombres", entity.Nombres);
-            cmd.Parameters.AddWithValue("@apellidos", entity.Apellidos);
-            cmd.Parameters.AddWithValue("@correo", entity.Correo);
-            cmd.Parameters.AddWithValue("@telefono", entity.Telefono);
-            cmd.Parameters.AddWithValue("@direccion", entity.Direccion);
-            cmd.Parameters.AddWithValue("@foto", entity.Foto);
-            cmd.Parameters.AddWithValue("@clave", entity.Clave);
-            cmd.Parameters.AddWithValue("@id_rol", entity.IdRol);
-
-            connection.Open();
-            cmd.ExecuteNonQuery();
-            return entity;
-        }
+        public Usuario Update(int id, Usuario usuario) =>
+            UpdateWithTransaction(id, usuario);
 
         public bool DeleteById(int id)
         {
@@ -128,6 +152,12 @@ namespace IntiGuard.Repositories
         public bool ExistsById(int id)
         {
             return GetById(id) != null;
+        }
+
+        public Usuario Create(Usuario entity)
+        {
+            CreateWithTransaction(entity);
+            return entity;
         }
     }
 }
