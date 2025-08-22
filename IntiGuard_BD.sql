@@ -6,6 +6,9 @@ GO
 USE IntiGuardDB;
 GO
 
+SELECT * FROM usuario
+
+
 -- Tabla Rol
 CREATE TABLE rol (
     id_rol INT PRIMARY KEY IDENTITY(1,1),

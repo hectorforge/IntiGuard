@@ -9,31 +9,31 @@ GO
 -- Insertar usuarios
 INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion,foto,clave,id_rol) 
 VALUES 
-('Gabriel', 'Sánchez', 'gabriel.sanchez@gmail.com','999888763','Matuzalen','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'clave123', 2),
-('César', 'Mendoza', 'cesar.mendoza@gmail.com','910658333','Av los cipreces','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'clave456', 2),
+('Gabriel', 'Sï¿½nchez', 'gabriel.sanchez@gmail.com','999888763','Matuzalen','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'clave123', 2),
+('Cï¿½sar', 'Mendoza', 'cesar.mendoza@gmail.com','910658333','Av los cipreces','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'clave456', 2),
 ('Diego', 'Vega', 'diego.vega@gmail.com','987654321','Av pueblo paleta','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg','clave789', 2),
-('Héctor', 'González', 'hector.gonzalez@gmail.com','910658335','Los Angeles','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg','admin1234', 1),
+('Hï¿½ctor', 'Gonzï¿½lez', 'hector.gonzalez@gmail.com','910658335','Los Angeles','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg','admin1234', 1),
 ('Erick', 'Castillo', 'erick.castillo@gmail.com','999888333','Av Imposible','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg', 'admin5678', 1);
 GO
 
 -- Insertar productos
 INSERT INTO producto (nombre_producto, descripcion, marca, precio, stock, imagen_url) 
 VALUES 
-('Camara de Seguridad IP', 'Camara de seguridad con visión nocturna, 4K y Wi-Fi', 'Dahua', 250.00, 100, 'https://example.com/camara_ip.jpg'),
-('Alarma Inteligente', 'Sistema de alarma con sensores de movimiento y conexión a app', 'Honeywell', 180.00, 80, 'https://example.com/alarma_inteligente.jpg'),
+('Camara de Seguridad IP', 'Camara de seguridad con visiï¿½n nocturna, 4K y Wi-Fi', 'Dahua', 250.00, 100, 'https://example.com/camara_ip.jpg'),
+('Alarma Inteligente', 'Sistema de alarma con sensores de movimiento y conexiï¿½n a app', 'Honeywell', 180.00, 80, 'https://example.com/alarma_inteligente.jpg'),
 ('Cerradura Digital', 'Cerradura inteligente para puertas con control remoto', 'Samsung', 350.00, 150, 'https://example.com/cerradura_digital.jpg'),
 ('Detectores de Humo', 'Detector de humo para sistemas de alarma de incendio', 'Nest', 120.00, 200, 'https://example.com/detector_humo.jpg'),
-('Camara de Seguridad Fija', 'Camara fija de seguridad con resolución HD', 'Sony', 180.00, 75, 'https://example.com/camara_fija.jpg'),
-('Cámara PTZ', 'Cámara con movimiento pan-tilt-zoom controlable a distancia', 'Bosch', 500.00, 50, 'https://example.com/camara_ptz.jpg'),
-('Sistema de Videovigilancia', 'Kit de videovigilancia de 8 cámaras con grabador', 'Vivotek', 1000.00, 30, 'https://example.com/videovigilancia.jpg'),
+('Camara de Seguridad Fija', 'Camara fija de seguridad con resoluciï¿½n HD', 'Sony', 180.00, 75, 'https://example.com/camara_fija.jpg'),
+('Cï¿½mara PTZ', 'Cï¿½mara con movimiento pan-tilt-zoom controlable a distancia', 'Bosch', 500.00, 50, 'https://example.com/camara_ptz.jpg'),
+('Sistema de Videovigilancia', 'Kit de videovigilancia de 8 cï¿½maras con grabador', 'Vivotek', 1000.00, 30, 'https://example.com/videovigilancia.jpg'),
 ('Intercomunicador', 'Intercomunicador de video para control de accesos', '2N', 400.00, 60, 'https://example.com/intercomunicador.jpg'),
 ('Sensor de Movimiento', 'Sensor de movimiento para sistemas de alarma', 'Hikvision', 90.00, 150, 'https://example.com/sensor_movimiento.jpg'),
-('Cámara Domo', 'Cámara de seguridad tipo domo para interiores y exteriores', 'Axis', 350.00, 120, 'https://example.com/camara_domo.jpg'),
-('Caja Fuerte Electrónica', 'Caja fuerte con cerradura electrónica para protección de documentos', 'SentrySafe', 220.00, 50, 'https://example.com/caja_fuerte.jpg'),
+('Cï¿½mara Domo', 'Cï¿½mara de seguridad tipo domo para interiores y exteriores', 'Axis', 350.00, 120, 'https://example.com/camara_domo.jpg'),
+('Caja Fuerte Electrï¿½nica', 'Caja fuerte con cerradura electrï¿½nica para protecciï¿½n de documentos', 'SentrySafe', 220.00, 50, 'https://example.com/caja_fuerte.jpg'),
 ('Control de Acceso RFID', 'Sistema de control de acceso por tarjetas RFID', 'Schneider', 450.00, 40, 'https://example.com/control_acceso.jpg'),
-('Cámara de Seguridad para Exterior', 'Cámara de seguridad con resistencia a la intemperie', 'Arlo', 300.00, 100, 'https://example.com/camara_exterior.jpg'),
-('Botón de Pánico', 'Botón de pánico para alertas de emergencia', 'Vesta', 80.00, 200, 'https://example.com/boton_panico.jpg'),
-('Sistema de Alarma para Vehículos', 'Alarma para vehículos con sensores y control remoto', 'Viper', 150.00, 80, 'https://example.com/alarma_vehiculo.jpg');
+('Cï¿½mara de Seguridad para Exterior', 'Cï¿½mara de seguridad con resistencia a la intemperie', 'Arlo', 300.00, 100, 'https://example.com/camara_exterior.jpg'),
+('Botï¿½n de Pï¿½nico', 'Botï¿½n de pï¿½nico para alertas de emergencia', 'Vesta', 80.00, 200, 'https://example.com/boton_panico.jpg'),
+('Sistema de Alarma para Vehï¿½culos', 'Alarma para vehï¿½culos con sensores y control remoto', 'Viper', 150.00, 80, 'https://example.com/alarma_vehiculo.jpg');
 GO
 
 -- Insertar comprobantes

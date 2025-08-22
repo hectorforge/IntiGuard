@@ -1,0 +1,341 @@
+/* =========================
+   VARIABLES DE COLOR
+========================= */
+:root {
+    --color-primary: #0d6efd; /* Azul Bootstrap */
+    --color-dark: #212529;
+    --color-light: #f8f9fa;
+    --color-accent: #e63946; /* Rojo para alertas/badges */
+    --color-footer-bg: #1a1a1a;
+}
+
+/* =========================
+   RESET BÁSICO
+========================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+/* =========================
+   NAVBAR
+========================= */
+.navbar-custom {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+    .navbar-custom .nav-link {
+        color: var(--color-dark);
+        font-weight: 500;
+        margin-left: 15px;
+        transition: color 0.3s ease;
+    }
+
+        .navbar-custom .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+    .navbar-custom .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-custom .bi-cart3 {
+        font-size: 1.2rem;
+    }
+
+.navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espacio entre logo y texto si agregas texto */
+}
+
+/* Badge del carrito */
+#cartCount {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    background-color: var(--color-accent) !important;
+}
+
+/* Logo grande en el home */
+.logo-navbar-home {
+    height: 70px; /* visible y llamativo */
+    width: auto;
+    object-fit: contain;
+}
+
+/* Logo pequeño en el resto de páginas */
+.logo-navbar-small {
+    height: 40px; /* más compacto */
+    width: auto;
+    object-fit: contain;
+}
+
+/* =========================
+   HERO (solo en Inicio)
+========================= */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hero-bg.jpg') center/cover no-repeat;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    .hero p {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+/* =========================
+   PRODUCTOS
+========================= */
+.product-card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .product-card img {
+        object-fit: cover;
+        height: 200px;
+        width: 100%;
+    }
+
+    .product-card .card-body {
+        text-align: center;
+    }
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer {
+    background-color: var(--color-footer-bg);
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+    footer a {
+        color: #ddd;
+        transition: color 0.3s ease;
+    }
+
+        footer a:hover {
+            color: var(--color-primary);
+        }
+
+/* =========================
+   BOTONES
+========================= */
+.btn-primary {
+    background-color: var(--color-primary);
+    border: none;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-2px);
+    }
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+}
+
+/* =========================
+   ESTILOS PARA CARRITO
+========================= */
+
+/* Contenedor principal */
+.cart-container {
+    margin: 40px auto;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+    /* Título */
+    .cart-container h2 {
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #f1f1f1;
+        padding-bottom: 10px;
+    }
+
+/* Tabla del carrito */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    .cart-table th,
+    .cart-table td {
+        text-align: center;
+        padding: 15px;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .cart-table th {
+        font-weight: 600;
+        color: #555;
+        background-color: #f9f9f9;
+    }
+
+    .cart-table img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+/* Cantidad */
+.qty-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+/* Botón eliminar */
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: #e63946;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .btn-remove:hover {
+        color: #c1121f;
+    }
+
+/* Resumen */
+.cart-summary {
+    text-align: right;
+    padding: 20px;
+    border-top: 2px solid #f1f1f1;
+}
+
+    .cart-summary h4 {
+        margin: 10px 0;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .cart-summary .total {
+        font-size: 1.5rem;
+        color: var(--color-primary);
+        font-weight: bold;
+    }
+
+/* Botones */
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+    .cart-actions .btn {
+        border-radius: 6px;
+        padding: 12px 20px;
+        font-weight: 500;
+        transition: transform 0.2s ease;
+    }
+
+        .cart-actions .btn:hover {
+            transform: translateY(-2px);
+        }
+
+/* Botón continuar comprando */
+.btn-continue {
+    background: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+    .btn-continue:hover {
+        background: #5a6268;
+    }
+
+/* Botón finalizar compra */
+.btn-checkout {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+}
+
+    .btn-checkout:hover {
+        background: #0b5ed7;
+    }
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .cart-table th, .cart-table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .cart-table img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .cart-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cart-summary {
+        text-align: center;
+    }
+}

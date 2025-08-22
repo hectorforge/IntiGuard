@@ -22,7 +22,7 @@ namespace IntiGuard.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string correo, string clave)
         {
-            Usuario usuario = null;
+            Usuario? usuario = null;
 
             using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
             {

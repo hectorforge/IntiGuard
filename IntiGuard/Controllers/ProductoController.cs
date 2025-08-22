@@ -15,7 +15,9 @@ namespace IntiGuard.Controllers
         public IActionResult Index()
         {
             var productos = _productoCrud.GetAll();
-            return View(productos);
+            if (User.IsInRole("ADMIN"))
+                return View("AdminIndex", productos); // vista admin
+            return View("Index", productos); // vista usuario
         }
         public IActionResult Details(int id)
         {

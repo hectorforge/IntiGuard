@@ -4,45 +4,76 @@
     ViewData["Title"] = "Productos";
 }
 
-<h2>Lista de Productos</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Productos</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Crear Nuevo Producto</a>
-</p>
+    @if (User.IsInRole("ADMIN"))
+    {
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Crear Nuevo Producto
+        </a>
+    }
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Marca</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Imagen</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var producto in Model)
-        {
-            <tr>
-                <td>@producto.NombreProducto</td>
-                <td>@producto.Descripcion</td>
-                <td>@producto.Marca</td>
-                <td>@producto.Precio.ToString("C")</td>
-                <td>@producto.Stock</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(producto.ImagenUrl))
+<div class="row">
+    @foreach (var producto in Model)
+    {
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <!-- Imagen del producto con zoom -->
+                <div class="overflow-hidden">
+                    <img src="@(!string.IsNullOrEmpty(producto.ImagenUrl) ? Url.Content(producto.ImagenUrl) : Url.Content("~/images/no-image.png"))"
+                         class="card-img-top img-fluid product-img"
+                         alt="@producto.NombreProducto"
+                         style="height:200px; object-fit:cover;" />
+                </div>
+
+                <!-- Cuerpo de la card -->
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-dark fw-bold">@producto.NombreProducto</h5>
+                    <p class="card-text text-muted mb-1">@producto.Marca</p>
+                    <p class="card-text small flex-grow-1">@producto.Descripcion</p>
+                    <p class="fw-bold text-primary fs-5">@producto.Precio.ToString("C")</p>
+                    <p class="text-muted small">Stock: @producto.Stock</p>
+                </div>
+
+                <!-- Footer con acciones -->
+                <div class="card-footer d-flex justify-content-between bg-light">
+                    <a asp-action="Details" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i> Ver
+                    </a>
+
+                    @if (User.IsInRole("ADMIN"))
                     {
-                        <img src="@producto.ImagenUrl" width="50" height="50" />
+                        <div class="d-flex gap-1">
+                            <a asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
                     }
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@producto.IdProducto">Ver</a> |
-                    <a asp-action="Edit" asp-route-id="@producto.IdProducto">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@producto.IdProducto">Eliminar</a>
-                </td>
-            </tr>
+                    else if (User.IsInRole("USER"))
+                    {
+                        <a asp-controller="Carrito" asp-action="Agregar" asp-route-id="@producto.IdProducto"
+                           class="btn btn-sm btn-success">
+                            <i class="bi bi-cart-plus"></i> Añadir
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Estilos adicionales -->
+<style>
+    .product-img {
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .product-img:hover {
+            transform: scale(1.1);
         }
-    </tbody>
-</table>
+</style>

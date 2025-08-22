@@ -36,7 +36,16 @@
 
         <input type="number" id="cantidadInput" class="form-control mr-2" placeholder="Cantidad" min="1" />
 
-        <button type="button" id="btnAgregar" class="btn btn-success">Agregar</button>
+        <button type="button" id="btnAgregar" class="btn btn-success">Agregar a Venta</button>
+
+        <!-- ✅ Nuevo botón: agrega directamente al carrito -->
+        <form asp-action="AgregarAlCarrito" method="post" class="d-inline">
+            <input type="hidden" name="idProducto" id="idProductoHidden" />
+            <input type="hidden" name="cantidad" id="cantidadHidden" />
+            <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+        </form>
+
+        <a asp-action="Carrito" class="btn btn-warning ml-2">Ver Carrito</a>
     </div>
 
     <table class="table table-bordered" id="detalleTable">
@@ -54,7 +63,7 @@
 
     <div id="detallesInputs"></div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">Guardar Venta</button>
     <a class="btn btn-secondary" href="@Url.Action("Index")">Cancelar</a>
 </form>
 
@@ -115,6 +124,21 @@
             actualizarTabla();
             $("#productoSelect").val("");
             $("#cantidadInput").val("");
+        });
+
+        // ✅ Sincronizar el form oculto del carrito
+        $("form[asp-action='AgregarAlCarrito']").submit(function () {
+            let idProducto = $("#productoSelect").val();
+            let cantidad = $("#cantidadInput").val();
+
+            if (!idProducto || cantidad <= 0) {
+                alert("Seleccione un producto y cantidad válida antes de enviarlo al carrito.");
+                return false;
+            }
+
+            $("#idProductoHidden").val(idProducto);
+            $("#cantidadHidden").val(cantidad);
+            return true;
         });
     </script>
 }

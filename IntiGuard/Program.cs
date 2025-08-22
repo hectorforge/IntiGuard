@@ -44,6 +44,9 @@ builder.Services.AddScoped<ICrud<Usuario>, UsuarioCrudImpl>();
 // Para inyectar los servicios en los controladores
 builder.Services.AddScoped<IVentaService, VentaServiceImpl>();
 
+//permite acceder al HttpContext actual desde cualquier parte de la aplicación
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

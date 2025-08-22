@@ -1,35 +1,32 @@
 ﻿@model IEnumerable<IntiGuard.Models.Venta>
-
 @{
     ViewData["Title"] = "Ventas";
 }
 
-<h2>Ventas</h2>
+<h2 class="fw-bold text-primary mb-4">Listado de Ventas</h2>
 
-<p>
-    <a class="btn btn-primary" href="@Url.Action("Create")">Registrar nueva venta</a>
-</p>
-
-<table class="table table-bordered">
-    <thead>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
-            <th>Cliente</th>
-            <th>Comprobante</th>
-            <th>Total</th>
+            <th>ID</th>
+            <th>Usuario</th>
             <th>Fecha</th>
-            <th></th>
+            <th>Total</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var v in Model)
+        @foreach (var venta in Model)
         {
             <tr>
-                <td>@v.Cliente</td>
-                <td>@v.TipoComprobante - @v.NumeroComprobante</td>
-                <td>@v.Total.ToString("C")</td>
-                <td>@v.FechaVenta.ToString("dd/MM/yyyy")</td>
+                <td>@venta.IdVenta</td>
+                <td>@venta.IdUsuario</td>
+                <td>@venta.FechaVenta.ToString("dd/MM/yyyy")</td>
+                <td>@venta.Total.ToString("C")</td>
                 <td>
-                    <a class="btn btn-info" href="@Url.Action("Details", new { id = v.IdVenta })">Detalles</a>
+                    <a asp-action="Details" asp-route-id="@venta.IdVenta" class="btn btn-sm btn-primary">
+                        <i class="bi bi-eye"></i> Detalles
+                    </a>
                 </td>
             </tr>
         }

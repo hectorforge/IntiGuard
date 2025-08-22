@@ -2,6 +2,7 @@
 using IntiGuard.Repositories.Interfaces;
 using IntiGuard.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using IntiGuard.Helpers;
 
 namespace IntiGuard.Controllers
 {
@@ -38,15 +39,86 @@ namespace IntiGuard.Controllers
             return View(new Venta());
         }
 
+        // Procesar venta directa (sin carrito)
         [HttpPost]
         public IActionResult Create(Venta venta, List<DetalleVenta> detalles)
         {
-            if (_ventaService.RegistrarVenta(venta, detalles))
+            if (detalles == null || !detalles.Any())
+            {
+                ModelState.AddModelError("", "Debe seleccionar al menos un producto.");
+                ViewBag.Productos = _productoCrud.GetAll();
+                return View(venta);
+            }
+
+            bool ok = _ventaService.RegistrarVenta(venta, detalles);
+            if (ok)
                 return RedirectToAction(nameof(Index));
 
-            ModelState.AddModelError("", "No se pudo registrar la venta");
+            ModelState.AddModelError("", "No se pudo registrar la venta.");
             ViewBag.Productos = _productoCrud.GetAll();
             return View(venta);
+        }
+
+        // Nuevo: Agregar productos al carrito (usa SessionExtensions en Helpers)
+        [HttpPost]
+        public IActionResult AgregarAlCarrito(int idProducto, int cantidad)
+        {
+            var producto = _productoCrud.GetById(idProducto);
+            if (producto == null) return NotFound();
+
+            var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
+
+            var item = carrito.FirstOrDefault(c => c.IdProducto == idProducto);
+            if (item != null)
+            {
+                item.Cantidad += cantidad;
+            }
+            else
+            {
+                carrito.Add(new DetalleVenta
+                {
+                    IdProducto = producto.IdProducto,
+                    Cantidad = cantidad,
+                    PrecioUnitario = producto.Precio
+                });
+            }
+
+            HttpContext.Session.SetObject("Carrito", carrito);
+
+            return RedirectToAction("Carrito");
+        }
+
+        // Vista Carrito
+        public IActionResult Carrito()
+        {
+            var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
+            return View(carrito);
+        }
+
+        // Confirmar compra del carrito
+        [HttpPost]
+        public IActionResult ConfirmarCompra()
+        {
+            var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito");
+            if (carrito == null || !carrito.Any())
+                return RedirectToAction("Carrito");
+
+            var venta = new Venta
+            {
+                IdUsuario = 1, // ← luego lo obtienes del usuario logueado
+                IdComprobante = 1,
+                Total = carrito.Sum(c => c.PrecioUnitario * c.Cantidad)
+            };
+
+            bool ok = _ventaService.RegistrarVenta(venta, carrito);
+            if (ok)
+            {
+                HttpContext.Session.Remove("Carrito"); // limpiar carrito
+                return RedirectToAction("Index");
+            }
+
+            TempData["Error"] = "No se pudo completar la compra.";
+            return RedirectToAction("Carrito");
         }
     }
 }
