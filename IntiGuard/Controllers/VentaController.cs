@@ -39,7 +39,6 @@ namespace IntiGuard.Controllers
             return View(new Venta());
         }
 
-        // Procesar venta directa (sin carrito)
         [HttpPost]
         public IActionResult Create(Venta venta, List<DetalleVenta> detalles)
         {
@@ -59,7 +58,7 @@ namespace IntiGuard.Controllers
             return View(venta);
         }
 
-        // Nuevo: Agregar productos al carrito (usa SessionExtensions en Helpers)
+        // uso de SessionExtensions en Helpers
         [HttpPost]
         public IActionResult AgregarAlCarrito(int idProducto, int cantidad)
         {
@@ -88,14 +87,12 @@ namespace IntiGuard.Controllers
             return RedirectToAction("Carrito");
         }
 
-        // Vista Carrito
         public IActionResult Carrito()
         {
             var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
             return View(carrito);
         }
 
-        // Confirmar compra del carrito
         [HttpPost]
         public IActionResult ConfirmarCompra()
         {
@@ -105,16 +102,22 @@ namespace IntiGuard.Controllers
 
             var venta = new Venta
             {
-                IdUsuario = 1, // ← luego lo obtienes del usuario logueado
-                IdComprobante = 1,
+                IdUsuario = 1,
                 Total = carrito.Sum(c => c.PrecioUnitario * c.Cantidad)
             };
 
             bool ok = _ventaService.RegistrarVenta(venta, carrito);
+
             if (ok)
             {
-                HttpContext.Session.Remove("Carrito"); // limpiar carrito
-                return RedirectToAction("Index");
+                HttpContext.Session.Remove("Carrito");
+
+                var comprobante = _ventaService.GenerarComprobante(venta);
+
+                TempData["Detalles"] = Newtonsoft.Json.JsonConvert.SerializeObject(carrito);
+                TempData["Total"] = venta.Total;
+
+                return RedirectToAction("Details", "Comprobante", new { id = comprobante.IdComprobante });
             }
 
             TempData["Error"] = "No se pudo completar la compra.";

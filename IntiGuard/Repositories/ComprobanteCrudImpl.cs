@@ -5,13 +5,32 @@ using System.Data;
 
 namespace IntiGuard.Repositories
 {
-    public class ComprobanteCrudImpl : ICrud<Comprobante>
+    public class ComprobanteCrudImpl : IComprobanteCrud
     {
         private readonly string _connectionString;
 
         public ComprobanteCrudImpl(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("IntiGuardDB");
+        }
+
+        public int InsertComprobanteTransaccion(Comprobante comprobante, SqlConnection connection, SqlTransaction transaction)
+        {
+            using var cmd = new SqlCommand("sp_comprobante_insert", connection, transaction);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@TipoComprobante", comprobante.TipoComprobante);
+            cmd.Parameters.AddWithValue("@NumeroComprobante", comprobante.NumeroComprobante);
+
+            var idParam = new SqlParameter("@IdComprobante", SqlDbType.Int)
+            {
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(idParam);
+
+            cmd.ExecuteNonQuery();
+
+            return (int)idParam.Value;
         }
 
         public Comprobante Create(Comprobante entity)

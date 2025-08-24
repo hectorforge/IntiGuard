@@ -1,98 +1,57 @@
-/* =========================
-   VARIABLES DE COLOR
-========================= */
-:root {
-    --color-primary: #0d6efd; /* Azul Bootstrap */
-    --color-dark: #212529;
-    --color-light: #f8f9fa;
-    --color-accent: #e63946; /* Rojo para alertas/badges */
-    --color-footer-bg: #1a1a1a;
+/* ===========================
+   NAVBAR Y LOGO
+=========================== */
+.logo-navbar-home {
+    height: 60px; /* más grande en portada */
+    width: auto;
+    transition: transform 0.2s ease-in-out;
 }
 
-/* =========================
-   RESET BÁSICO
-========================= */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--color-light);
-    color: var(--color-dark);
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-}
-
-a {
-    text-decoration: none;
-}
-
-    a:hover {
-        text-decoration: underline;
+    .logo-navbar-home:hover {
+        transform: scale(1.05);
     }
 
-/* =========================
-   NAVBAR
-========================= */
+.logo-navbar-small {
+    height: 35px; /* más compacto en las demás vistas */
+    width: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+    .logo-navbar-small:hover {
+        transform: scale(1.03);
+    }
+
+/* Navbar colores personalizados */
 .navbar-custom {
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
+    background-color: #1b263b !important; /* azul oscuro corporativo */
 }
 
     .navbar-custom .nav-link {
-        color: var(--color-dark);
+        color: #fff !important;
         font-weight: 500;
-        margin-left: 15px;
-        transition: color 0.3s ease;
+        transition: color 0.2s ease-in-out;
     }
 
         .navbar-custom .nav-link:hover {
-            color: var(--color-primary);
+            color: #ffd369 !important;
         }
 
-    .navbar-custom .navbar-toggler {
-        border: none;
-    }
-
-    .navbar-custom .bi-cart3 {
-        font-size: 1.2rem;
-    }
-
-.navbar .navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* espacio entre logo y texto si agregas texto */
-}
-
-/* Badge del carrito */
+/* Badge carrito */
 #cartCount {
     font-size: 0.75rem;
-    padding: 3px 6px;
-    background-color: var(--color-accent) !important;
+    padding: 0.3em 0.5em;
 }
 
-/* Logo grande en el home */
-.logo-navbar-home {
-    height: 70px; /* visible y llamativo */
-    width: auto;
-    object-fit: contain;
-}
-
-/* Logo pequeño en el resto de páginas */
-.logo-navbar-small {
-    height: 40px; /* más compacto */
-    width: auto;
-    object-fit: contain;
-}
-
-/* =========================
-   HERO (solo en Inicio)
-========================= */
+/* ===========================
+   HERO (solo en Home)
+=========================== */
 .hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hero-bg.jpg') center/cover no-repeat;
-    height: 60vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../img/hero-bg.jpg') center/cover no-repeat;
+    height: 80vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    border-radius: 0 0 20px 20px;
 }
 
     .hero h1 {
@@ -102,240 +61,184 @@ a {
 
     .hero p {
         font-size: 1.25rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
     }
 
-/* =========================
-   PRODUCTOS
-========================= */
+/* ===========================
+   PRODUCTOS (vista cliente)
+=========================== */
 .product-card {
-    border: none;
-    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+    border-radius: 15px;
+    background: #fff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+    /* Hover elegante */
     .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+        transform: translateY(-6px);
+        border-color: #0d6efd; /* azul corporativo (Bootstrap primary) */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
 
+    /* Imagen con estilo uniforme */
     .product-card img {
+        height: 220px;
         object-fit: cover;
-        height: 200px;
         width: 100%;
+        transition: transform 0.3s ease-in-out;
     }
 
+    /* Zoom de imagen */
+    .product-card:hover img {
+        transform: scale(1.08);
+    }
+
+    /* Cuerpo de la card */
     .product-card .card-body {
         text-align: center;
+        padding: 15px;
     }
 
-.product-price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--color-primary);
+    /* Botones con separación */
+    .product-card .btn {
+        margin-top: 8px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+/* ===========================
+   CARRITO
+=========================== */
+.cart-table th {
+    background-color: #1b263b;
+    color: #fff;
+    text-align: center;
 }
 
-/* =========================
+.cart-table td {
+    vertical-align: middle;
+}
+
+.cart-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1b263b;
+}
+
+/* ===========================
    FOOTER
-========================= */
+=========================== */
 footer {
-    background-color: var(--color-footer-bg);
-    color: #ccc;
-    font-size: 0.9rem;
+    background-color: #1b263b;
 }
 
     footer a {
-        color: #ddd;
-        transition: color 0.3s ease;
+        color: #ffd369;
+        text-decoration: none;
     }
 
         footer a:hover {
-            color: var(--color-primary);
+            color: #fff;
         }
 
-/* =========================
-   BOTONES
-========================= */
-.btn-primary {
-    background-color: var(--color-primary);
-    border: none;
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+/* Tarjetas de producto */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-    .btn-primary:hover {
-        background-color: #0b5ed7;
-        transform: translateY(-2px);
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
+/* Botones carrito */
+.btn-add-to-cart {
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+    .btn-add-to-cart:hover {
+        transform: scale(1.05);
+    }
+
+/* Carrito badge */
+#cartCount {
+    font-size: 0.75rem;
+    padding: 0.35em 0.6em;
+}
+
+/* Comprobante */
+.card-header {
+    font-size: 1.25rem;
+}
+
+/* Hero principal (Home) */
+.hero {
+    background: url('../assets/img/portfolio/hero-bg.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 80vh; /* altura del hero */
+    position: relative;
+    padding: 60px 0;
+}
+
+    /* Overlay oscuro para mejorar contraste */
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* sombra negra semi-transparente */
+        z-index: 1;
+    }
+
+    .hero .container {
+        position: relative;
+        z-index: 2; /* texto sobre el overlay */
+    }
+
     .hero h1 {
-        font-size: 2rem;
+        font-size: 3rem;
+        font-weight: 700;
     }
 
     .hero p {
-        font-size: 1rem;
-    }
-}
-
-/* =========================
-   ESTILOS PARA CARRITO
-========================= */
-
-/* Contenedor principal */
-.cart-container {
-    margin: 40px auto;
-    max-width: 900px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    padding: 20px;
-}
-
-    /* Título */
-    .cart-container h2 {
-        font-weight: 600;
-        color: #212529;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #f1f1f1;
-        padding-bottom: 10px;
+        font-size: 1.25rem;
     }
 
-/* Tabla del carrito */
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-    .cart-table th,
-    .cart-table td {
-        text-align: center;
-        padding: 15px;
-        border-bottom: 1px solid #f1f1f1;
-    }
-
-    .cart-table th {
-        font-weight: 600;
-        color: #555;
-        background-color: #f9f9f9;
-    }
-
-    .cart-table img {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-/* Cantidad */
-.qty-input {
-    width: 60px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 5px;
-}
-
-/* Botón eliminar */
-.btn-remove {
-    background: transparent;
-    border: none;
-    color: #e63946;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-    .btn-remove:hover {
-        color: #c1121f;
-    }
-
-/* Resumen */
-.cart-summary {
-    text-align: right;
-    padding: 20px;
-    border-top: 2px solid #f1f1f1;
-}
-
-    .cart-summary h4 {
-        margin: 10px 0;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .cart-summary .total {
-        font-size: 1.5rem;
-        color: var(--color-primary);
-        font-weight: bold;
-    }
-
-/* Botones */
-.cart-actions {
+/* Iconos redes sociales */
+.social-icon {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-    .cart-actions .btn {
-        border-radius: 6px;
-        padding: 12px 20px;
-        font-weight: 500;
-        transition: transform 0.2s ease;
-    }
-
-        .cart-actions .btn:hover {
-            transform: translateY(-2px);
-        }
-
-/* Botón continuar comprando */
-.btn-continue {
-    background: #6c757d;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+    border-radius: 50%;
     color: #fff;
-    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .btn-continue:hover {
-        background: #5a6268;
+    .social-icon:hover {
+        transform: translateY(-4px);
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
     }
 
-/* Botón finalizar compra */
-.btn-checkout {
-    background: var(--color-primary);
-    color: #fff;
-    border: none;
-}
-
-    .btn-checkout:hover {
-        background: #0b5ed7;
+    /* Colores personalizados */
+    .social-icon.facebook {
+        background: #3b5998;
     }
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-    .cart-table th, .cart-table td {
-        font-size: 0.9rem;
-        padding: 10px;
+    .social-icon.instagram {
+        background: #e4405f;
     }
 
-    .cart-table img {
-        width: 60px;
-        height: 60px;
+    .social-icon.twitter {
+        background: #1da1f2;
     }
 
-    .cart-actions {
-        flex-direction: column;
-        gap: 10px;
+    .social-icon.linkedin {
+        background: #0077b5;
     }
-
-    .cart-summary {
-        text-align: center;
-    }
-}

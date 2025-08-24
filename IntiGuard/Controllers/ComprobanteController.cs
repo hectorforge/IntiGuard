@@ -22,10 +22,17 @@ namespace IntiGuard.Controllers
         public IActionResult Details(int id)
         {
             var comprobante = _comprobanteCrud.GetById(id);
-            if (comprobante == null)
-                return NotFound();
+            if (comprobante == null) return NotFound();
+
+            if (TempData["Detalles"] != null)
+            {
+                var detalles = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DetalleVenta>>(TempData["Detalles"].ToString());
+                ViewBag.Detalles = detalles;
+                ViewBag.Total = TempData["Total"];
+            }
 
             return View(comprobante);
         }
+
     }
 }

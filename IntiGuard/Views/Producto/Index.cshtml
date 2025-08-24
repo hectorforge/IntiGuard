@@ -19,61 +19,64 @@
     @foreach (var producto in Model)
     {
         <div class="col-md-4 col-lg-3 mb-4">
-            <div class="card h-100 shadow-sm border-0">
-                <!-- Imagen del producto con zoom -->
-                <div class="overflow-hidden">
-                    <img src="@(!string.IsNullOrEmpty(producto.ImagenUrl) ? Url.Content(producto.ImagenUrl) : Url.Content("~/images/no-image.png"))"
-                         class="card-img-top img-fluid product-img"
-                         alt="@producto.NombreProducto"
-                         style="height:200px; object-fit:cover;" />
-                </div>
+            <div class="card product-card h-100">
+                <!-- Imagen con efecto zoom -->
+                <img src="@(!string.IsNullOrEmpty(producto.ImagenUrl) ? Url.Content(producto.ImagenUrl) : Url.Content("~/images/no-image.png"))"
+                     class="card-img-top"
+                     alt="@producto.NombreProducto" />
 
-                <!-- Cuerpo de la card -->
+                <!-- Cuerpo -->
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title text-dark fw-bold">@producto.NombreProducto</h5>
-                    <p class="card-text text-muted mb-1">@producto.Marca</p>
-                    <p class="card-text small flex-grow-1">@producto.Descripcion</p>
+                    <p class="text-muted mb-1">@producto.Marca</p>
+                    <p class="small flex-grow-1">@producto.Descripcion</p>
                     <p class="fw-bold text-primary fs-5">@producto.Precio.ToString("C")</p>
-                    <p class="text-muted small">Stock: @producto.Stock</p>
+
+                    @if (User.IsInRole("ADMIN"))
+                    {
+                        <p class="text-muted small">Stock: @producto.Stock</p>
+                    }
                 </div>
 
                 <!-- Footer con acciones -->
-                <div class="card-footer d-flex justify-content-between bg-light">
+                <div class="card-footer bg-light text-center">
                     <a asp-action="Details" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-eye"></i> Ver
                     </a>
 
                     @if (User.IsInRole("ADMIN"))
                     {
-                        <div class="d-flex gap-1">
-                            <a asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-warning">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </div>
-                    }
-                    else if (User.IsInRole("USER"))
-                    {
-                        <a asp-controller="Carrito" asp-action="Agregar" asp-route-id="@producto.IdProducto"
-                           class="btn btn-sm btn-success">
-                            <i class="bi bi-cart-plus"></i> Añadir
+                        <a asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i>
                         </a>
+                        <a asp-action="Delete" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- Para usuario o visitante -->
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("USER"))
+                        {
+                            <!-- Botón de carrito -->
+                            <form asp-controller="Venta" asp-action="AgregarAlCarrito" method="post" class="d-inline">
+                                <input type="hidden" name="idProducto" value="@producto.IdProducto" />
+                                <input type="hidden" name="cantidad" value="1" />
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="bi bi-cart-plus"></i> Comprar
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <!-- Redirigir a Login -->
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-primary">
+                                <i class="bi bi-box-arrow-in-right"></i> Comprar
+                            </a>
+                        }
                     }
                 </div>
             </div>
         </div>
     }
 </div>
-
-<!-- Estilos adicionales -->
-<style>
-    .product-img {
-        transition: transform 0.3s ease-in-out;
-    }
-
-        .product-img:hover {
-            transform: scale(1.1);
-        }
-</style>

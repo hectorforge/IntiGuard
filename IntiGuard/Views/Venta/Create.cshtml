@@ -4,68 +4,95 @@
     var productos = ViewBag.Productos as IEnumerable<IntiGuard.Models.Producto>;
 }
 
-<h2>Registrar Venta</h2>
+<div class="container mt-4">
+    <h2 class="fw-bold text-primary mb-4">
+        <i class="bi bi-bag-plus"></i> Registrar Venta
+    </h2>
 
-<form asp-action="Create" method="post" id="ventaForm">
-    <div class="form-group">
-        <label>Id Usuario</label>
-        <input asp-for="IdUsuario" class="form-control" />
-    </div>
+    <form asp-action="Create" method="post" id="ventaForm" class="card shadow-sm p-4 rounded-3">
+        <!-- Usuario -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Id Usuario</label>
+            <input asp-for="IdUsuario" class="form-control" placeholder="Ingrese ID de Usuario" />
+            <span asp-validation-for="IdUsuario" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label>Id Comprobante</label>
-        <input asp-for="IdComprobante" class="form-control" />
-    </div>
+        <!-- Total -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Total</label>
+            <input asp-for="Total" class="form-control" id="totalVenta" readonly />
+        </div>
 
-    <div class="form-group">
-        <label>Total</label>
-        <input asp-for="Total" class="form-control" id="totalVenta" readonly />
-    </div>
+        <hr class="my-4" />
 
-    <hr />
+        <h4 class="mb-3">Detalles de la Venta</h4>
 
-    <h4>Detalles de la Venta</h4>
-    <div class="form-inline mb-3">
-        <select id="productoSelect" class="form-control mr-2">
-            <option value="">Seleccione un producto</option>
-            @foreach (var p in productos)
-            {
-                <option value="@p.IdProducto" data-precio="@p.Precio">@p.NombreProducto</option>
-            }
-        </select>
+        <!-- Selector de productos -->
+        <div class="row g-2 mb-3 align-items-center">
+            <div class="col-md-6">
+                <select id="productoSelect" class="form-select">
+                    <option value="">Seleccione un producto</option>
+                    @foreach (var p in productos)
+                    {
+                        <option value="@p.IdProducto" data-precio="@p.Precio">
+                            @p.NombreProducto (@p.Precio.ToString("C"))
+                        </option>
+                    }
+                </select>
+            </div>
 
-        <input type="number" id="cantidadInput" class="form-control mr-2" placeholder="Cantidad" min="1" />
+            <div class="col-md-2">
+                <input type="number" id="cantidadInput" class="form-control" placeholder="Cantidad" min="1" />
+            </div>
 
-        <button type="button" id="btnAgregar" class="btn btn-success">Agregar a Venta</button>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="button" id="btnAgregar" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Agregar
+                </button>
 
-        <!-- ✅ Nuevo botón: agrega directamente al carrito -->
-        <form asp-action="AgregarAlCarrito" method="post" class="d-inline">
-            <input type="hidden" name="idProducto" id="idProductoHidden" />
-            <input type="hidden" name="cantidad" id="cantidadHidden" />
-            <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
-        </form>
+                <!-- Boton: enviar directo al carrito -->
+                <form asp-action="AgregarAlCarrito" method="post" class="d-inline">
+                    <input type="hidden" name="idProducto" id="idProductoHidden" />
+                    <input type="hidden" name="cantidad" id="cantidadHidden" />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-cart-plus"></i> Al Carrito
+                    </button>
+                </form>
 
-        <a asp-action="Carrito" class="btn btn-warning ml-2">Ver Carrito</a>
-    </div>
+                <a asp-action="Carrito" class="btn btn-warning">
+                    <i class="bi bi-cart3"></i> Ver Carrito
+                </a>
+            </div>
+        </div>
 
-    <table class="table table-bordered" id="detalleTable">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unit.</th>
-                <th>Subtotal</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <!-- Tabla de detalle -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="detalleTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unit.</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <div id="detallesInputs"></div>
+        <div id="detallesInputs"></div>
 
-    <button type="submit" class="btn btn-primary">Guardar Venta</button>
-    <a class="btn btn-secondary" href="@Url.Action("Index")">Cancelar</a>
-</form>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Guardar Venta
+            </button>
+            <a class="btn btn-secondary" href="@Url.Action("Index")">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <script>
@@ -86,13 +113,18 @@
                         <td>${d.cantidad}</td>
                         <td>${d.precio.toFixed(2)}</td>
                         <td>${subtotal.toFixed(2)}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${i})">Eliminar</button></td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${i})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `);
             });
 
             $("#totalVenta").val(total.toFixed(2));
 
+            // Campos ocultos para enviar al Controller
             let hiddenInputs = "";
             detalles.forEach((d, i) => {
                 hiddenInputs += `
@@ -126,7 +158,7 @@
             $("#cantidadInput").val("");
         });
 
-        // ✅ Sincronizar el form oculto del carrito
+        // Sincronizar el form oculto del carrito
         $("form[asp-action='AgregarAlCarrito']").submit(function () {
             let idProducto = $("#productoSelect").val();
             let cantidad = $("#cantidadInput").val();
