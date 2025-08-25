@@ -49,7 +49,7 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -62,10 +62,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
-app.UseAuthentication(); // antes de authorization importante para q fuincione
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Habilitar sesiones
+app.UseSession();
+
+// Rutas por defecto
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
