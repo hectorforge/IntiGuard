@@ -5,9 +5,11 @@ using IntiGuard.Services.Implements;
 using IntiGuard.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuracion para la seguridad
+//  Configuración de Seguridad
+// =============================
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -26,34 +28,46 @@ builder.Services.AddAuthentication(options =>
     options.ClaimActions.MapJsonKey("picture", "picture", "url");
 });
 
-// Add services to the container.
+//  Servicios del contenedor
+// =============================
 builder.Services.AddAuthorization();
 builder.Services.AddControllersWithViews();
 
-// Para inyectar los repositorios en los servicios
+// Repositorios
 builder.Services.AddScoped<IDetalleVentaCrud, DetalleVentaCrudImpl>();
 builder.Services.AddScoped<IProductoCrud, ProductoCrudImpl>();
 builder.Services.AddScoped<IVentaCrud, VentaCrudImpl>();
-builder.Services.AddScoped<IUsuarioCrud, UsuarioCrudImpl>(); 
+builder.Services.AddScoped<IUsuarioCrud, UsuarioCrudImpl>();
 
 builder.Services.AddScoped<ICrud<Comprobante>, ComprobanteCrudImpl>();
 builder.Services.AddScoped<ICrud<Rol>, RolCrudImpl>();
 builder.Services.AddScoped<ICrud<Usuario>, UsuarioCrudImpl>();
 
+builder.Services.AddScoped<IComprobanteCrud, ComprobanteCrudImpl>();
 
-// Para inyectar los servicios en los controladores
+// Servicios
 builder.Services.AddScoped<IVentaService, VentaServiceImpl>();
 
-//permite acceder al HttpContext actual desde cualquier parte de la aplicación
+// Acceso a HttpContext
 builder.Services.AddHttpContextAccessor();
+
+//  Configuración de Sesiones
+// =============================
+builder.Services.AddDistributedMemoryCache(); // requerido por Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
-// Configurar pipeline
+//  Configuración del Pipeline
+// =============================
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -65,10 +79,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Habilitar sesiones
 app.UseSession();
 
-// Rutas por defecto
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
