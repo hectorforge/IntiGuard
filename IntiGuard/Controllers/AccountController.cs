@@ -17,6 +17,7 @@ namespace IntiGuard.Controllers
 
         // ----------------------------------- Login -----------------------------------
         // GET: Mostrar formulario de login
+        // test github quitar 
         [HttpGet]
         public IActionResult Login(string? message)
         {
