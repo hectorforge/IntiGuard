@@ -31,11 +31,9 @@ namespace IntiGuard.Services.Implements
             if (comprobante == null)
                 throw new Exception("Comprobante no encontrado");
 
-            // 🚀 Obtener total de la venta con el mismo ID (usando SP de ventas)
             var venta = _ventaCrud.GetAll().FirstOrDefault(v => v.IdVenta == id);
             var total = venta?.Total;
 
-            // 🚀 Si TempData trae detalles
             IEnumerable<DetalleVenta>? detalles = null;
             if (tempData != null)
             {
