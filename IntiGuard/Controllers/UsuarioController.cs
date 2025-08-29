@@ -16,7 +16,12 @@ namespace IntiGuard.Controllers
         public IActionResult Index()
         {
             var usuarios = _usuarioCrud.GetAll();
-            return View(usuarios);
+            var usuariosConEstado = usuarios.Select(u =>
+            {
+                u.HasPurchases = _usuarioCrud.HasPurchases(u.IdUsuario);
+                return u;
+            }).ToList();
+            return View(usuariosConEstado);
         }
 
         public IActionResult Details(int id)

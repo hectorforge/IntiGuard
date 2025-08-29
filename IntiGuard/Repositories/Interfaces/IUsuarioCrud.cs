@@ -6,5 +6,6 @@ namespace IntiGuard.Repositories.Interfaces
     {
         void CreateWithTransaction(Usuario usuario);
         Usuario UpdateWithTransaction(int id, Usuario usuario);
+        bool HasPurchases(int id);
     }
 }

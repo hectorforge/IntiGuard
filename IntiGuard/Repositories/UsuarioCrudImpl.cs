@@ -159,5 +159,19 @@ namespace IntiGuard.Repositories
             CreateWithTransaction(entity);
             return entity;
         }
+
+        public bool HasPurchases(int id)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            using var cmd = new SqlCommand("SELECT COUNT(*) FROM venta WHERE id_usuario = @id", connection);
+
+            cmd.Parameters.AddWithValue("@id", id);
+
+            connection.Open();
+            int count = (int)cmd.ExecuteScalar();
+
+            return count > 0;
+        }
+
     }
 }
