@@ -1,4 +1,4 @@
-ï»¿/* *
+/* *
 *   Estructura IntiGuard
 *   Base de datos y tablas.
 */
@@ -313,6 +313,32 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE sp_venta_delete_by_usuario
+    @id_venta INT,
+    @id_usuario INT
+AS
+BEGIN
+    -- Validar si la venta pertenece al usuario
+    IF EXISTS (
+        SELECT 1 FROM venta
+        WHERE id_venta = @id_venta AND id_usuario = @id_usuario
+    )
+    BEGIN
+	DELETE FROM detalle_venta 
+	WHERE id_venta = @id_venta;
+
+        DELETE FROM venta
+        WHERE id_venta = @id_venta;
+    END
+    ELSE
+    BEGIN
+        -- Lanzar error si no existe o no pertenece al usuario
+        RAISERROR('La venta no existe o no pertenece al usuario especificado.', 16, 1);
+    END
+END
+GO
+
+
 -- ========================================
 -- CONSULTAS DETALLE VENTA
 -- ========================================
@@ -357,7 +383,7 @@ INSERT INTO rol (nombre_rol) VALUES ('ADMIN');
 INSERT INTO rol (nombre_rol) VALUES ('USER');
 GO
 
--- Insertar usuarios ( ContraseÃ±a hasheada = contra1234)
+-- Insertar usuarios ( Contraseña hasheada = contra1234)
 INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion,foto,clave,id_rol) 
 VALUES 
 ('Gabriel', 'Sanchez', 'gabriel.sanchez@gmail.com','999888763','Matuzalen','https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg' ,'$2a$12$qyB3d6SXESXK6SeZcgQvC.Uxm/GiqcxCzo8UK1cUS/xQUdPjYx4c2', 2),
@@ -370,21 +396,21 @@ GO
 -- Insertar productos
 INSERT INTO producto (nombre_producto, descripcion, marca, precio, stock, imagen_url) 
 VALUES 
-('Camara de Seguridad IP', 'Camara de seguridad con visiï¿½n nocturna, 4K y Wi-Fi', 'Dahua', 250.00, 100, 'https://example.com/camara_ip.jpg'),
-('Alarma Inteligente', 'Sistema de alarma con sensores de movimiento y conexiï¿½n a app', 'Honeywell', 180.00, 80, 'https://example.com/alarma_inteligente.jpg'),
+('Camara de Seguridad IP', 'Camara de seguridad con visi n nocturna, 4K y Wi-Fi', 'Dahua', 250.00, 100, 'https://example.com/camara_ip.jpg'),
+('Alarma Inteligente', 'Sistema de alarma con sensores de movimiento y conexi n a app', 'Honeywell', 180.00, 80, 'https://example.com/alarma_inteligente.jpg'),
 ('Cerradura Digital', 'Cerradura inteligente para puertas con control remoto', 'Samsung', 350.00, 150, 'https://example.com/cerradura_digital.jpg'),
 ('Detectores de Humo', 'Detector de humo para sistemas de alarma de incendio', 'Nest', 120.00, 200, 'https://example.com/detector_humo.jpg'),
-('Camara de Seguridad Fija', 'Camara fija de seguridad con resoluciï¿½n HD', 'Sony', 180.00, 75, 'https://example.com/camara_fija.jpg'),
-('Cï¿½mara PTZ', 'Cï¿½mara con movimiento pan-tilt-zoom controlable a distancia', 'Bosch', 500.00, 50, 'https://example.com/camara_ptz.jpg'),
-('Sistema de Videovigilancia', 'Kit de videovigilancia de 8 cï¿½maras con grabador', 'Vivotek', 1000.00, 30, 'https://example.com/videovigilancia.jpg'),
+('Camara de Seguridad Fija', 'Camara fija de seguridad con resoluci n HD', 'Sony', 180.00, 75, 'https://example.com/camara_fija.jpg'),
+('C mara PTZ', 'C mara con movimiento pan-tilt-zoom controlable a distancia', 'Bosch', 500.00, 50, 'https://example.com/camara_ptz.jpg'),
+('Sistema de Videovigilancia', 'Kit de videovigilancia de 8 c maras con grabador', 'Vivotek', 1000.00, 30, 'https://example.com/videovigilancia.jpg'),
 ('Intercomunicador', 'Intercomunicador de video para control de accesos', '2N', 400.00, 60, 'https://example.com/intercomunicador.jpg'),
 ('Sensor de Movimiento', 'Sensor de movimiento para sistemas de alarma', 'Hikvision', 90.00, 150, 'https://example.com/sensor_movimiento.jpg'),
-('Cï¿½mara Domo', 'Cï¿½mara de seguridad tipo domo para interiores y exteriores', 'Axis', 350.00, 120, 'https://example.com/camara_domo.jpg'),
-('Caja Fuerte Electrï¿½nica', 'Caja fuerte con cerradura electrï¿½nica para protecciï¿½n de documentos', 'SentrySafe', 220.00, 50, 'https://example.com/caja_fuerte.jpg'),
+('C mara Domo', 'C mara de seguridad tipo domo para interiores y exteriores', 'Axis', 350.00, 120, 'https://example.com/camara_domo.jpg'),
+('Caja Fuerte Electr nica', 'Caja fuerte con cerradura electr nica para protecci n de documentos', 'SentrySafe', 220.00, 50, 'https://example.com/caja_fuerte.jpg'),
 ('Control de Acceso RFID', 'Sistema de control de acceso por tarjetas RFID', 'Schneider', 450.00, 40, 'https://example.com/control_acceso.jpg'),
-('Cï¿½mara de Seguridad para Exterior', 'Cï¿½mara de seguridad con resistencia a la intemperie', 'Arlo', 300.00, 100, 'https://example.com/camara_exterior.jpg'),
-('Botï¿½n de Pï¿½nico', 'Botï¿½n de pï¿½nico para alertas de emergencia', 'Vesta', 80.00, 200, 'https://example.com/boton_panico.jpg'),
-('Sistema de Alarma para Vehï¿½culos', 'Alarma para vehï¿½culos con sensores y control remoto', 'Viper', 150.00, 80, 'https://example.com/alarma_vehiculo.jpg');
+('C mara de Seguridad para Exterior', 'C mara de seguridad con resistencia a la intemperie', 'Arlo', 300.00, 100, 'https://example.com/camara_exterior.jpg'),
+('Bot n de P nico', 'Bot n de p nico para alertas de emergencia', 'Vesta', 80.00, 200, 'https://example.com/boton_panico.jpg'),
+('Sistema de Alarma para Veh culos', 'Alarma para veh culos con sensores y control remoto', 'Viper', 150.00, 80, 'https://example.com/alarma_vehiculo.jpg');
 GO
 
 -- Insertar comprobantes
@@ -421,15 +447,15 @@ USE IntiGuardDB;
 GO
 
 UPDATE producto SET 
-    nombre_producto = 'CÃ¡mara de Seguridad IP',
-    descripcion = 'CÃ¡mara de seguridad con visiÃ³n nocturna, 4K y Wi-Fi',
+    nombre_producto = 'Cámara de Seguridad IP',
+    descripcion = 'Cámara de seguridad con visión nocturna, 4K y Wi-Fi',
     marca = 'Dahua',
     imagen_url = '/assets/img/portfolio/1.jpg'
 WHERE id_producto = 1;
 
 UPDATE producto SET 
     nombre_producto = 'Alarma Inteligente',
-    descripcion = 'Sistema de alarma con sensores de movimiento y conexiÃ³n a app',
+    descripcion = 'Sistema de alarma con sensores de movimiento y conexión a app',
     marca = 'Honeywell',
     imagen_url = '/assets/img/portfolio/2.jpg'
 WHERE id_producto = 2;
@@ -449,22 +475,22 @@ UPDATE producto SET
 WHERE id_producto = 4;
 
 UPDATE producto SET 
-    nombre_producto = 'CÃ¡mara de Seguridad Fija',
-    descripcion = 'CÃ¡mara fija de seguridad con resoluciÃ³n HD',
+    nombre_producto = 'Cámara de Seguridad Fija',
+    descripcion = 'Cámara fija de seguridad con resolución HD',
     marca = 'Sony',
     imagen_url = '/assets/img/portfolio/5.jpg'
 WHERE id_producto = 5;
 
 UPDATE producto SET 
-    nombre_producto = 'CÃ¡mara PTZ',
-    descripcion = 'CÃ¡mara con movimiento pan-tilt-zoom controlable a distancia',
+    nombre_producto = 'Cámara PTZ',
+    descripcion = 'Cámara con movimiento pan-tilt-zoom controlable a distancia',
     marca = 'Bosch',
     imagen_url = '/assets/img/portfolio/6.jpg'
 WHERE id_producto = 6;
 
 UPDATE producto SET 
     nombre_producto = 'Sistema de Videovigilancia',
-    descripcion = 'Kit de videovigilancia de 8 cÃ¡maras con grabador',
+    descripcion = 'Kit de videovigilancia de 8 cámaras con grabador',
     marca = 'Vivotek',
     imagen_url = '/assets/img/portfolio/7.jpg'
 WHERE id_producto = 7;
@@ -484,15 +510,15 @@ UPDATE producto SET
 WHERE id_producto = 9;
 
 UPDATE producto SET 
-    nombre_producto = 'CÃ¡mara Domo',
-    descripcion = 'CÃ¡mara de seguridad tipo domo para interiores y exteriores',
+    nombre_producto = 'Cámara Domo',
+    descripcion = 'Cámara de seguridad tipo domo para interiores y exteriores',
     marca = 'Axis',
     imagen_url = '/assets/img/portfolio/10.jpg'
 WHERE id_producto = 10;
 
 UPDATE producto SET 
-    nombre_producto = 'Caja Fuerte ElectrÃ³nica',
-    descripcion = 'Caja fuerte con cerradura electrÃ³nica para protecciÃ³n de documentos',
+    nombre_producto = 'Caja Fuerte Electrónica',
+    descripcion = 'Caja fuerte con cerradura electrónica para protección de documentos',
     marca = 'SentrySafe',
     imagen_url = '/assets/img/portfolio/11.jpg'
 WHERE id_producto = 11;
@@ -505,22 +531,22 @@ UPDATE producto SET
 WHERE id_producto = 12;
 
 UPDATE producto SET 
-    nombre_producto = 'CÃ¡mara de Seguridad para Exterior',
-    descripcion = 'CÃ¡mara de seguridad con resistencia a la intemperie',
+    nombre_producto = 'Cámara de Seguridad para Exterior',
+    descripcion = 'Cámara de seguridad con resistencia a la intemperie',
     marca = 'Arlo',
     imagen_url = '/assets/img/portfolio/13r.jpg'
 WHERE id_producto = 13;
 
 UPDATE producto SET 
-    nombre_producto = 'BotÃ³n de PÃ¡nico',
-    descripcion = 'BotÃ³n de pÃ¡nico para alertas de emergencia',
+    nombre_producto = 'Botón de Pánico',
+    descripcion = 'Botón de pánico para alertas de emergencia',
     marca = 'Vesta',
     imagen_url = '/assets/img/portfolio/14.jpg'
 WHERE id_producto = 14;
 
 UPDATE producto SET 
-    nombre_producto = 'Sistema de Alarma para VehÃ­culos',
-    descripcion = 'Alarma para vehÃ­culos con sensores y control remoto',
+    nombre_producto = 'Sistema de Alarma para Vehículos',
+    descripcion = 'Alarma para vehículos con sensores y control remoto',
     marca = 'Viper',
     imagen_url = '/assets/img/portfolio/15.jpg'
 WHERE id_producto = 15;
