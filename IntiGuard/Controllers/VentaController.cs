@@ -97,16 +97,24 @@ namespace IntiGuard.Controllers
         public IActionResult ConfirmarCompra()
         {
             var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito");
+
+            Console.WriteLine($"Este es el carrito : {carrito.Count}");
+
             if (carrito == null || !carrito.Any())
                 return RedirectToAction("Carrito");
 
             var venta = new Venta
             {
                 IdUsuario = 1,
+                IdComprobante = 2,
                 Total = carrito.Sum(c => c.PrecioUnitario * c.Cantidad)
             };
 
+            Console.WriteLine($"Este es la venta crea : {venta.Total}");
+
             bool ok = _ventaService.RegistrarVenta(venta, carrito);
+
+            Console.WriteLine($"Este es el bool de la venta : {ok}");
 
             if (ok)
             {

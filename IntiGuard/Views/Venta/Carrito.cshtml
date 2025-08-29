@@ -3,6 +3,13 @@
     ViewData["Title"] = "Carrito";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
 <div class="container mt-4">
     <h2 class="fw-bold text-primary mb-4">Mi Carrito</h2>
 

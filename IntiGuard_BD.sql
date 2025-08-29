@@ -28,6 +28,7 @@ CREATE TABLE usuario (
     clave VARCHAR(255),
     id_rol INT NOT NULL,
     fecha_registro DATETIME NOT NULL DEFAULT GETDATE(),
+    activo bit not null default 1,
     FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
 );
 GO
@@ -109,7 +110,7 @@ GO
 CREATE PROCEDURE sp_usuario_get_all
 AS
 BEGIN
-    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo,u.telefono,u.direccion,u.foto ,u.id_rol, r.nombre_rol, u.fecha_registro
+    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo,u.telefono,u.direccion,u.foto ,u.id_rol, r.nombre_rol, u.fecha_registro, u.activo
     FROM usuario u
     INNER JOIN rol r ON u.id_rol = r.id_rol;
 END
@@ -120,7 +121,7 @@ CREATE PROCEDURE sp_usuario_get_by_id
     @id_usuario INT
 AS
 BEGIN
-    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono,u.direccion,u.foto, u.id_rol, r.nombre_rol, u.fecha_registro
+    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono,u.direccion,u.foto, u.id_rol, r.nombre_rol, u.fecha_registro, u.activo
     FROM usuario u
     INNER JOIN rol r ON u.id_rol = r.id_rol
     WHERE u.id_usuario = @id_usuario;
