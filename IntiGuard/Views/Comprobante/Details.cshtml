@@ -70,9 +70,11 @@
 
                     <div class="text-end mt-3">
                         <h4 class="fw-bold text-primary">
-                            Total: @ViewBag.Total?.ToString("C")
+                            Total: @(ViewBag.Total != null ?
+                            string.Format("{0:C}", ViewBag.Total) : "0.00")
                         </h4>
                     </div>
+
                 </div>
 
                 <div class="card-footer bg-light text-center py-3">

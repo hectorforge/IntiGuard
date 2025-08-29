@@ -5,38 +5,64 @@
     var idVenta = ViewBag.IdVenta;
 }
 
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
 
-<h2>Detalles de la Venta #@idVenta</h2>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-primary">
+                    <i class="bi bi-cart-check"></i> Detalles de la Venta #@idVenta
+                </h2>
+                <a class="btn btn-outline-secondary" asp-controller="Venta" asp-action="Index">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </a>
+            </div>
 
-<table class="table table-bordered table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            foreach (var item in Model)
+            @if (Model != null && Model.Any())
             {
-                <tr>
-                    <td>@item.NombreProducto</td>
-                    <td>@item.Cantidad</td>
-                    <td>@item.PrecioUnitario.ToString("C")</td>
-                    <td>@(item.Cantidad * item.PrecioUnitario).ToString("C")</td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="4" class="text-center">No hay productos registrados en esta venta.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+                <div class="row g-3 justify-content-center">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm border-0">
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark fw-bold text-center">
+                                        <i class="bi bi-box-seam"></i> @item.NombreProducto
+                                    </h5>
+                                    <p class="card-text mb-1 text-center">
+                                        <span class="fw-semibold">Cantidad:</span> @item.Cantidad
+                                    </p>
+                                    <p class="card-text mb-1 text-center">
+                                        <span class="fw-semibold">Precio Unitario:</span>
+                                        <span class="text-success">@item.PrecioUnitario.ToString("C")</span>
+                                    </p>
+                                    <p class="card-text text-center">
+                                        <span class="fw-semibold">Subtotal:</span>
+                                        <span class="text-primary fw-bold">
+                                            @((item.Cantidad * item.PrecioUnitario).ToString("C"))
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
 
-<a class="btn btn-secondary" asp-controller="Venta" asp-action="Index">Volver a ventas</a>
+                <div class="card mt-4 shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h4 class="fw-bold text-primary mb-0">
+                            Total: @Model.Sum(d => d.Cantidad * d.PrecioUnitario).ToString("C")
+                        </h4>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center py-3">
+                    <i class="bi bi-exclamation-circle"></i> No hay productos registrados en esta venta.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

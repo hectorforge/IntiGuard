@@ -1,34 +1,59 @@
 ﻿@model IEnumerable<IntiGuard.Models.Venta>
+
 @{
     ViewData["Title"] = "Ventas";
 }
 
-<h2 class="fw-bold text-primary mb-4">Listado de Ventas</h2>
+<div class="container mt-4">
+    <h2 class="fw-bold text-primary mb-4">
+        <i class="bi bi-receipt"></i> Listado de Ventas
+    </h2>
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var venta in Model)
-        {
-            <tr>
-                <td>@venta.IdVenta</td>
-                <td>@venta.IdUsuario</td>
-                <td>@venta.FechaVenta.ToString("dd/MM/yyyy")</td>
-                <td>@venta.Total.ToString("C")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@venta.IdVenta" class="btn btn-sm btn-primary">
-                        <i class="bi bi-eye"></i> Detalles
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0 align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Tipo Comprobante</th>
+                        <th>Número</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var venta in Model)
+                        {
+                            <tr>
+                                <td>@venta.IdVenta</td>
+                                <td>@venta.Cliente</td>
+                                <td>@venta.TipoComprobante</td>
+                                <td>@venta.NumeroComprobante</td>
+                                <td class="fw-bold text-success">@venta.Total.ToString("C")</td>
+                                <td>@venta.FechaVenta.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a asp-controller="DetalleVenta" asp-action="Venta" asp-route-id="@venta.IdVenta"
+                                       class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Detalles
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-3">
+                                <i class="bi bi-exclamation-circle"></i> No hay ventas registradas.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

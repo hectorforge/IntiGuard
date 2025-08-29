@@ -1,38 +1,32 @@
-﻿using IntiGuard.Models;
-using IntiGuard.Repositories.Interfaces;
+﻿using IntiGuard.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IntiGuard.Controllers
 {
     public class ComprobanteController : Controller
     {
-        private readonly ICrud<Comprobante> _comprobanteCrud;
+        private readonly IComprobanteService _comprobanteService;
 
-        public ComprobanteController(ICrud<Comprobante> comprobanteCrud)
+        public ComprobanteController(IComprobanteService comprobanteService)
         {
-            _comprobanteCrud = comprobanteCrud;
+            _comprobanteService = comprobanteService;
         }
 
         public IActionResult Index()
         {
-            var comprobantes = _comprobanteCrud.GetAll();
+            var comprobantes = _comprobanteService.GetAll();
             return View(comprobantes);
         }
 
         public IActionResult Details(int id)
         {
-            var comprobante = _comprobanteCrud.GetById(id);
+            var (comprobante, total, detalles) = _comprobanteService.GetDetails(id, TempData["Detalles"]);
             if (comprobante == null) return NotFound();
 
-            if (TempData["Detalles"] != null)
-            {
-                var detalles = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DetalleVenta>>(TempData["Detalles"].ToString());
-                ViewBag.Detalles = detalles;
-                ViewBag.Total = TempData["Total"];
-            }
+            ViewBag.Total = total;
+            ViewBag.Detalles = detalles;
 
             return View(comprobante);
         }
-
     }
 }

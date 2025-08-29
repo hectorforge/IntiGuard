@@ -40,6 +40,7 @@ builder.Services.AddScoped<IVentaCrud, VentaCrudImpl>();
 builder.Services.AddScoped<IUsuarioCrud, UsuarioCrudImpl>();
 
 builder.Services.AddScoped<ICrud<Comprobante>, ComprobanteCrudImpl>();
+builder.Services.AddScoped<IComprobanteService, ComprobanteServiceImpl>(); 
 builder.Services.AddScoped<ICrud<Rol>, RolCrudImpl>();
 builder.Services.AddScoped<ICrud<Usuario>, UsuarioCrudImpl>();
 
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IComprobanteCrud, ComprobanteCrudImpl>();
 
 // Servicios
 builder.Services.AddScoped<IVentaService, VentaServiceImpl>();
+builder.Services.AddScoped<IComprobanteService, ComprobanteServiceImpl>();
 
 // Acceso a HttpContext
 builder.Services.AddHttpContextAccessor();
