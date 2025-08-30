@@ -31,6 +31,7 @@ namespace IntiGuard.Repositories
                 cmd.Parameters.AddWithValue("@telefono", usuario.Telefono ?? "");
                 cmd.Parameters.AddWithValue("@direccion", usuario.Direccion ?? "");
                 cmd.Parameters.AddWithValue("@foto", usuario.Foto ?? "");
+                cmd.Parameters.AddWithValue("@activo", usuario.Activo);
                 cmd.Parameters.AddWithValue("@clave", usuario.Clave ?? "");
                 cmd.Parameters.AddWithValue("@id_rol", usuario.IdRol ?? (object)DBNull.Value);
 
@@ -62,8 +63,9 @@ namespace IntiGuard.Repositories
                 cmd.Parameters.AddWithValue("@correo", usuario.Correo ?? "");
                 cmd.Parameters.AddWithValue("@telefono", usuario.Telefono ?? "");
                 cmd.Parameters.AddWithValue("@direccion", usuario.Direccion ?? "");
+                cmd.Parameters.AddWithValue("@activo", usuario.Activo); 
                 cmd.Parameters.AddWithValue("@foto", usuario.Foto ?? "");
-                cmd.Parameters.AddWithValue("@clave", usuario.Clave ?? "");
+                cmd.Parameters.AddWithValue("@clave", string.IsNullOrEmpty(usuario.Clave) ? (object)DBNull.Value : usuario.Clave);
                 cmd.Parameters.AddWithValue("@id_rol", usuario.IdRol ?? (object)DBNull.Value);
 
                 cmd.ExecuteNonQuery();
@@ -101,7 +103,8 @@ namespace IntiGuard.Repositories
                     Foto = reader.IsDBNull(6) ? null : reader.GetString(6),
                     IdRol = reader.GetInt32(7),
                     NombreRol = reader.GetString(8),
-                    FechaRegistro = reader.GetDateTime(9)
+                    FechaRegistro = reader.GetDateTime(9),
+                    Activo = reader.GetBoolean(10)
                 };
             }
             return usuario;
@@ -129,11 +132,13 @@ namespace IntiGuard.Repositories
                     Foto = reader.IsDBNull(6) ? null : reader.GetString(6),
                     IdRol = reader.GetInt32(7),
                     NombreRol = reader.GetString(8),
-                    FechaRegistro = reader.GetDateTime(9)
+                    FechaRegistro = reader.GetDateTime(9),
+                    Activo = reader.GetBoolean(10)
                 });
             }
             return lista;
         }
+
 
         public Usuario Update(int id, Usuario usuario) =>
             UpdateWithTransaction(id, usuario);

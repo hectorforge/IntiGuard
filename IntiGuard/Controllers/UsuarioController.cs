@@ -1,16 +1,38 @@
 ﻿using IntiGuard.Models;
 using IntiGuard.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 
 namespace IntiGuard.Controllers
 {
     public class UsuarioController : Controller
     {
         private readonly IUsuarioCrud _usuarioCrud;
+        private readonly string _connectionString;
 
-        public UsuarioController(IUsuarioCrud usuarioCrud)
+        public UsuarioController(IUsuarioCrud usuarioCrud, IConfiguration configuration)
         {
             _usuarioCrud = usuarioCrud;
+            _connectionString = configuration.GetConnectionString("IntiGuardDB");
+        }
+        private IEnumerable<Rol> GetRoles()
+        {
+            var roles = new List<Rol>();
+            using var connection = new SqlConnection(_connectionString);
+            using var cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM rol", connection);
+
+            connection.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                roles.Add(new Rol
+                {
+                    IdRol = reader.GetInt32(0),
+                    NombreRol = reader.GetString(1)
+                });
+            }
+            return roles;
         }
 
         public IActionResult Index()
@@ -36,6 +58,7 @@ namespace IntiGuard.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.Roles = new SelectList(GetRoles(), "IdRol", "NombreRol");
             return View(new Usuario());
         }
 
@@ -44,10 +67,14 @@ namespace IntiGuard.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!string.IsNullOrEmpty(usuario.Clave))
+                    usuario.Clave = BCrypt.Net.BCrypt.HashPassword(usuario.Clave);
+
                 _usuarioCrud.Create(usuario);
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Roles = new SelectList(GetRoles(), "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 
@@ -58,6 +85,7 @@ namespace IntiGuard.Controllers
             if (usuario == null)
                 return NotFound();
 
+            ViewBag.Roles = new SelectList(GetRoles(), "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 
@@ -69,10 +97,16 @@ namespace IntiGuard.Controllers
 
             if (ModelState.IsValid)
             {
+                if (!string.IsNullOrEmpty(usuario.Clave))
+                    usuario.Clave = BCrypt.Net.BCrypt.HashPassword(usuario.Clave);
+                else
+                    usuario.Clave = null; // no actualizar clave
+
                 _usuarioCrud.Update(id, usuario);
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Roles = new SelectList(GetRoles(), "IdRol", "NombreRol", usuario.IdRol);
             return View(usuario);
         }
 

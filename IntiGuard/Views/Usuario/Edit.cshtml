@@ -6,35 +6,60 @@
 
 <h2>Editar Usuario</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <input type="hidden" asp-for="IdUsuario" />
+
     <div class="form-group">
         <label asp-for="Nombres"></label>
         <input asp-for="Nombres" class="form-control" />
     </div>
+
     <div class="form-group">
         <label asp-for="Apellidos"></label>
         <input asp-for="Apellidos" class="form-control" />
     </div>
+
     <div class="form-group">
         <label asp-for="Correo"></label>
         <input asp-for="Correo" class="form-control" />
     </div>
+
     <div class="form-group">
-        <label asp-for="Clave"></label>
-        <input asp-for="Clave" class="form-control" type="password" />
+        <label asp-for="Telefono"></label>
+        <input asp-for="Telefono" class="form-control" />
     </div>
+
     <div class="form-group">
-        <label asp-for="IdRol"></label>
-        <input asp-for="IdRol" class="form-control" />
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+
+    <div class="form-group">
+        <label>Foto</label>
+        <input asp-for="Foto" type="text" class="form-control" placeholder="URL de la foto" />
+        @if (!string.IsNullOrEmpty(Model.Foto))
+        {
+            <div class="mt-2">
+                <img src="@Model.Foto" alt="Foto Usuario" width="100" />
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label>Nueva Contraseña (opcional)</label>
+        <input asp-for="Clave" class="form-control" type="password" placeholder="Dejar vacío para no cambiar" />
+    </div>
+
+    <div class="form-group">
+        <label>Rol</label>
+        <select asp-for="IdRol" class="form-select" asp-items="ViewBag.Roles"></select>
+    </div>
+
+    <div class="form-check mt-2">
+        <input asp-for="Activo" class="form-check-input" />
+        <label asp-for="Activo" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Cancelar</a>
 </form>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
