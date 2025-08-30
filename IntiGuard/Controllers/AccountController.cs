@@ -33,7 +33,7 @@ namespace IntiGuard.Controllers
                 await conn.OpenAsync();
                 var cmd = new SqlCommand(@"
                                 SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion, u.foto,
-                                       u.clave, u.id_rol, r.nombre_rol
+                                       u.clave, u.id_rol, r.nombre_rol, u.activo
                                 FROM usuario u
                                 INNER JOIN rol r ON u.id_rol = r.id_rol
                                 WHERE u.correo = @Correo", conn);
@@ -54,15 +54,24 @@ namespace IntiGuard.Controllers
                             Foto = reader["foto"].ToString(),
                             Clave = reader["clave"].ToString(),
                             IdRol = (int)reader["id_rol"],
-                            NombreRol = reader["nombre_rol"].ToString()
+                            NombreRol = reader["nombre_rol"].ToString(),
+                            Activo = (bool)reader["activo"]
                         };
                     }
                 }
             }
 
+            // Usuario no existe o credenciales malas
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(clave, usuario.Clave))
             {
                 ViewBag.Error = "Credenciales inválidas";
+                return View();
+            }
+
+            // Usuario inactivo
+            if (!usuario.Activo)
+            {
+                ViewBag.Error = "Tu cuenta ha sido deshabilitada. Contacta con soporte.";
                 return View();
             }
 
@@ -133,7 +142,8 @@ namespace IntiGuard.Controllers
                         Foto = readerReload["foto"].ToString(),
                         IdRol = (int)readerReload["id_rol"],
                         NombreRol = readerReload["nombre_rol"].ToString(),
-                        Clave = readerReload["clave"].ToString()
+                        Clave = readerReload["clave"].ToString(),
+                        Activo = (bool)readerReload["activo"]
                     };
                 }
             }
@@ -194,10 +204,18 @@ namespace IntiGuard.Controllers
                                     : reader["foto"].ToString(),
                                 IdRol = (int)reader["id_rol"],
                                 NombreRol = reader["nombre_rol"].ToString(),
-                                Clave = reader["clave"].ToString()
+                                Clave = reader["clave"].ToString(),
+                                Activo = (bool)reader["activo"]
                             };
                         }
                     }
+                }
+
+                // Usuario inactivo
+                if (usuario != null && !usuario.Activo)
+                {
+                    TempData["Error"] = "Tu cuenta ha sido deshabilitada. Contacta con soporte.";
+                    return RedirectToAction("Login");
                 }
 
                 if (usuario == null)
@@ -309,7 +327,8 @@ namespace IntiGuard.Controllers
                         Direccion = readerReload["direccion"].ToString(),
                         Foto = readerReload["foto"].ToString(),
                         IdRol = (int)readerReload["id_rol"],
-                        NombreRol = readerReload["nombre_rol"].ToString()
+                        NombreRol = readerReload["nombre_rol"].ToString(),
+                        Activo = (bool)readerReload["activo"]
                     };
                 }
             }
@@ -341,7 +360,8 @@ namespace IntiGuard.Controllers
                 new Claim("Correo", usuario.Correo ?? ""),
                 new Claim("Telefono", usuario.Telefono ?? ""),
                 new Claim("Direccion", usuario.Direccion ?? ""),
-                new Claim("IdRol", usuario.IdRol.ToString())
+                new Claim("IdRol", usuario.IdRol.ToString()),
+                new Claim("Activo", usuario.Activo.ToString())
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -367,7 +387,7 @@ namespace IntiGuard.Controllers
                 conn.Open();
                 var cmd = new SqlCommand(@"
             SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, 
-                   u.direccion, u.foto, u.id_rol, r.nombre_rol
+                   u.direccion, u.foto, u.id_rol, r.nombre_rol, u.activo
             FROM usuario u
             INNER JOIN rol r ON u.id_rol = r.id_rol
             WHERE u.id_usuario = @Id", conn);
@@ -388,7 +408,8 @@ namespace IntiGuard.Controllers
                             Direccion = reader["direccion"].ToString(),
                             Foto = reader["foto"].ToString(),
                             IdRol = (int)reader["id_rol"],
-                            NombreRol = reader["nombre_rol"].ToString()
+                            NombreRol = reader["nombre_rol"].ToString(),
+                            Activo = (bool)reader["activo"]
                         };
                     }
                 }
