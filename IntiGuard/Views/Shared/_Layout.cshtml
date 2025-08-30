@@ -7,14 +7,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - IntiGuard</title>
-
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
-
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="~/css/styles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
@@ -44,27 +38,22 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm" id="mainNav">
         <div class="container">
-            <!-- Logo dinámico -->
             <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-                <img src="~/Logo/LogoIntiGuard.jpg"
+                <img src="~/Logo/IconIntiGuard.jpg"
                      alt="IntiGuard"
                      class="@(ViewData["Title"]?.ToString() == "Inicio" ? "logo-navbar-home" : "logo-navbar-small")" />
                 <span class="fw-bold ms-2 text-white">IntiGuard</span>
             </a>
 
-            <!-- Botón de menú responsive -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Menú -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
 
-                    <!-- Menú público -->
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
                     </li>
@@ -72,7 +61,6 @@
                         <a class="nav-link" asp-controller="Producto" asp-action="Index">Productos</a>
                     </li>
 
-                    <!-- Cliente (USER) -->
                     @if (HttpContextAccessor.HttpContext.User.IsInRole("USER"))
                     {
                         <li class="nav-item">
@@ -85,7 +73,6 @@
                         </li>
                     }
 
-                    <!-- Admin -->
                     @if (HttpContextAccessor.HttpContext.User.IsInRole("ADMIN"))
                     {
                         <li class="nav-item"><a class="nav-link" asp-controller="Producto" asp-action="AdminIndex">Gestionar Productos</a></li>
@@ -94,7 +81,6 @@
                         <li class="nav-item"><a class="nav-link" asp-controller="Comprobante" asp-action="Index">Comprobantes</a></li>
                     }
 
-                    <!-- Autenticación -->
                     @if (User.Identity.IsAuthenticated)
                     {
                         var fullName = User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value ?? User.Identity.Name;
@@ -140,26 +126,43 @@
         </section>
     }
 
-    <!-- Contenido -->
     <main class="container my-5" style="min-height:100vh">
         @RenderBody()
     </main>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 bg-dark text-white mt-auto">
-        <div class="container">
-            <p class="mb-0">&copy; @DateTime.Now.Year - IntiGuard | Todos los derechos reservados</p>
-            <div class="mt-2">
-                <a href="#" class="text-white-50">Política de Privacidad</a> |
-                <a href="#" class="text-white-50">Términos de Uso</a>
-            </div>
+    <footer class="text-center py-4 bg-dark text-white">
+        <h5 class="mb-3 fw-bold">Síguenos en nuestras redes</h5>
+        <div class="d-flex justify-content-center gap-3 mb-3">
+            <a href="https://facebook.com" target="_blank" class="social-icon"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="https://twitter.com" target="_blank" class="social-icon"><i class="bi bi-twitter"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="social-icon"><i class="bi bi-linkedin"></i></a>
         </div>
+        <p class="mb-0">&copy; @DateTime.Now.Year - IntiGuard. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
+    <script>
+        function actualizarCarrito() {
+            $.get("@Url.Action("GetCartCount", "Venta")", function (data) {
+                if (data.count !== undefined) {
+                    $("#cartCount").text(data.count);
+                    if (data.count > 0) {
+                        $("#cartCount").show();
+                    } else {
+                        $("#cartCount").hide();
+                    }
+                }
+            });
+        }
+        $(document).ready(function () {
+            actualizarCarrito();
+            setInterval(actualizarCarrito, 10000);
+        });
+    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

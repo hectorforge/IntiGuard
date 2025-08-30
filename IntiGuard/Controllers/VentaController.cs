@@ -181,6 +181,13 @@ namespace IntiGuard.Controllers
             return RedirectToAction("Carrito");
         }
 
+        [HttpGet]
+        public IActionResult GetCartCount()
+        {
+            var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
+            int count = carrito.Sum(c => c.Cantidad);
+            return Json(new { count });
+        }
 
     }
 }

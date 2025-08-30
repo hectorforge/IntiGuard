@@ -4,29 +4,206 @@
 
 <body class="home-page">
 
-    <div class="container my-5">
-        <h2 class="text-center mb-4">Seguridad y eficiencia para tu hogar o compañía</h2>
-        <div class="row">
-            <!-- Aquí puedes mostrar productos destacados o banners // por implementar -->
+    <!-- Hero -->
+    <section class="hero bg-dark text-white text-center py-5" data-aos="fade-up">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Protege lo que más importa</h1>
+            <p class="lead mt-3">Sistemas de seguridad confiables para tu hogar o negocio</p>
+            <a asp-controller="Producto" asp-action="Index" class="btn btn-primary btn-lg mt-4">
+                <i class="bi bi-shield-lock"></i> Ver Productos
+            </a>
         </div>
+    </section>
 
-        <!-- Redes sociales -->
-        <div class="text-center mt-5">
-            <h5 class="mb-3 fw-bold">Síguenos en nuestras redes</h5>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="https://facebook.com" target="_blank" class="social-icon facebook">
-                    <i class="bi bi-facebook"></i>
-                </a>
-                <a href="https://instagram.com" target="_blank" class="social-icon instagram">
-                    <i class="bi bi-instagram"></i>
-                </a>
-                <a href="https://twitter.com" target="_blank" class="social-icon twitter">
-                    <i class="bi bi-twitter"></i>
-                </a>
-                <a href="https://linkedin.com" target="_blank" class="social-icon linkedin">
-                    <i class="bi bi-linkedin"></i>
-                </a>
+    <!-- Servicios -->
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-4" data-aos="fade-up">Nuestros Servicios</h2>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-right">
+                    <div class="card h-100 shadow-sm p-4">
+                        <i class="bi bi-camera-video display-4 text-primary mb-3"></i>
+                        <h5 class="fw-bold">Cámaras de Seguridad</h5>
+                        <p>Monitorea tu hogar o empresa 24/7 con equipos de última tecnología.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="card h-100 shadow-sm p-4">
+                        <i class="bi bi-door-closed display-4 text-success mb-3"></i>
+                        <h5 class="fw-bold">Control de Acceso</h5>
+                        <p>Sistemas de ingreso con huella digital, tarjetas o reconocimiento facial.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-left">
+                    <div class="card h-100 shadow-sm p-4">
+                        <i class="bi bi-bell display-4 text-danger mb-3"></i>
+                        <h5 class="fw-bold">Alarmas Inteligentes</h5>
+                        <p>Protección inmediata ante intrusiones y notificaciones en tiempo real.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-4" data-aos="fade-up">Productos Destacados</h2>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="zoom-in">
+                    <div class="card shadow-sm h-100">
+                        <img src="/assets/img/portfolio/1.jpg" class="card-img-top" alt="Producto 1">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Kit de Videovigilancia</h5>
+                            <p class="text-muted">4 cámaras + grabador NVR con almacenamiento en la nube.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card shadow-sm h-100">
+                        <img src="/assets/img/portfolio/10.jpg" class="card-img-top" alt="Producto 2">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Cámara WiFi 360°</h5>
+                            <p class="text-muted">Visión nocturna y control desde tu celular en tiempo real.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="card shadow-sm h-100">
+                        <img src="/assets/img/portfolio/2.jpg" class="card-img-top" alt="Producto 3">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Sistema de Alarmas</h5>
+                            <p class="text-muted">Alarma inteligente con sensores de movimiento y humo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-4" data-aos="fade-up">¿Por qué elegirnos?</h2>
+            <div class="row g-4">
+                <div class="col-md-3" data-aos="flip-left">
+                    <i class="bi bi-shield-check display-4 text-primary mb-2"></i>
+                    <h6 class="fw-bold">Máxima Seguridad</h6>
+                </div>
+                <div class="col-md-3" data-aos="flip-left" data-aos-delay="200">
+                    <i class="bi bi-cpu display-4 text-success mb-2"></i>
+                    <h6 class="fw-bold">Tecnología Avanzada</h6>
+                </div>
+                <div class="col-md-3" data-aos="flip-left" data-aos-delay="400">
+                    <i class="bi bi-people display-4 text-warning mb-2"></i>
+                    <h6 class="fw-bold">Atención Personalizada</h6>
+                </div>
+                <div class="col-md-3" data-aos="flip-left" data-aos-delay="600">
+                    <i class="bi bi-award display-4 text-danger mb-2"></i>
+                    <h6 class="fw-bold">Garantía de Calidad</h6>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4" data-aos="fade-up">Lo que dicen nuestros clientes</h2>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-right">
+                    <div class="card p-4 shadow-sm">
+                        <p>"Excelente servicio, me instalaron cámaras en mi negocio y ahora me siento mucho más seguro."</p>
+                        <h6 class="fw-bold mb-0">Juan Pérez</h6>
+                        <small class="text-muted">Empresario</small>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="card p-4 shadow-sm">
+                        <p>"La alarma inteligente me avisa al celular, ¡me da tranquilidad cuando no estoy en casa!"</p>
+                        <h6 class="fw-bold mb-0">María González</h6>
+                        <small class="text-muted">Cliente residencial</small>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-left">
+                    <div class="card p-4 shadow-sm">
+                        <p>"Un equipo profesional y rápido en la instalación. Muy recomendado."</p>
+                        <h6 class="fw-bold mb-0">Carlos Ramírez</h6>
+                        <small class="text-muted">Gerente de empresa</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="cta bg-primary text-white text-center py-5" data-aos="zoom-in">
+        <div class="container">
+            <h2 class="fw-bold mb-3">¿Listo para proteger lo que más importa?</h2>
+            <p class="lead">Contáctanos hoy y recibe una asesoría gratuita.</p>
+            <a asp-controller="Contacto" asp-action="Index" class="btn btn-light btn-lg">
+                <i class="bi bi-envelope"></i> Contáctanos
+            </a>
+        </div>
+    </section>
+
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4" data-aos="fade-up">Nuestro Equipo</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-3 col-sm-6" data-aos="fade-up">
+                    <div class="card shadow-sm border-0 h-100 text-center p-4">
+                        <img src="/img/team-placeholder.jpg" alt="Hector Julio" class="rounded-circle mx-auto mb-3" style="width:120px;height:120px;object-fit:cover;">
+                        <h6 class="fw-bold">Hector Julio Hernandez Tacas</h6>
+                        <p class="text-muted small">Especialista en Seguridad</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card shadow-sm border-0 h-100 text-center p-4">
+                        <img src="/img/team-placeholder.jpg" alt="Cesar Vilcarromero" class="rounded-circle mx-auto mb-3" style="width:120px;height:120px;object-fit:cover;">
+                        <h6 class="fw-bold">Cesar Vilcarromero</h6>
+                        <p class="text-muted small">Soporte Técnico</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card shadow-sm border-0 h-100 text-center p-4">
+                        <img src="/img/team-placeholder.jpg" alt="Gabriel" class="rounded-circle mx-auto mb-3" style="width:120px;height:120px;object-fit:cover;">
+                        <h6 class="fw-bold">Gabriel</h6>
+                        <p class="text-muted small">Instalaciones</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="card shadow-sm border-0 h-100 text-center p-4">
+                        <img src="/img/team-placeholder.jpg" alt="Erick" class="rounded-circle mx-auto mb-3" style="width:120px;height:120px;object-fit:cover;">
+                        <h6 class="fw-bold">Erick</h6>
+                        <p class="text-muted small">Consultor de Ventas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-5">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4" data-aos="fade-up">Dónde Estamos</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-aos="zoom-in">
+                    <div class="ratio ratio-16x9 shadow-sm rounded">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345095986!2d144.95373631531588!3d-37.81627997975195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf0727f7d3a2e0d!2sRandom%20Business!5e0!3m2!1ses!2s!4v1700000000000!5m2!1ses!2s"
+                                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
 </body>

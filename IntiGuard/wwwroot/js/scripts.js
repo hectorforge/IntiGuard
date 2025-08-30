@@ -100,5 +100,4 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
 });
