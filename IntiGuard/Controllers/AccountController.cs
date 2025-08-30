@@ -16,8 +16,6 @@ namespace IntiGuard.Controllers
         }
 
         // ----------------------------------- Login -----------------------------------
-        // GET: Mostrar formulario de login
-        // test github quitar 
         [HttpGet]
         public IActionResult Login(string? message)
         {
@@ -88,17 +86,21 @@ namespace IntiGuard.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
+            Usuario usuario = null;
+
             using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
             {
                 conn.Open();
-                var checkCmd = new SqlCommand("SELECT COUNT(*) FROM usuario WHERE correo=@Correo", conn);
+                var checkCmd = new SqlCommand("SELECT * FROM usuario WHERE correo=@Correo", conn);
                 checkCmd.Parameters.AddWithValue("@Correo", model.Correo);
-                int count = (int)checkCmd.ExecuteScalar();
 
-                if (count > 0)
+                using (var reader = checkCmd.ExecuteReader())
                 {
-                    ViewBag.Error = "El correo ya está registrado";
-                    return View(model);
+                    if (reader.Read())
+                    {
+                        ViewBag.Error = "El correo ya está registrado.";
+                        return View(model);
+                    }
                 }
 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Clave);
@@ -114,6 +116,33 @@ namespace IntiGuard.Controllers
                 insertCmd.Parameters.AddWithValue("@clave", hashedPassword);
                 insertCmd.Parameters.AddWithValue("@id_rol", model.IdRol ?? 2);
                 insertCmd.ExecuteNonQuery();
+
+                // Traemos el usuario recién insertado
+                var reloadCmd = new SqlCommand("SELECT TOP 1 u.*, r.nombre_rol FROM usuario u INNER JOIN rol r ON u.id_rol=r.id_rol WHERE correo=@Correo", conn);
+                reloadCmd.Parameters.AddWithValue("@Correo", model.Correo);
+                using var readerReload = reloadCmd.ExecuteReader();
+                if (readerReload.Read())
+                {
+                    usuario = new Usuario
+                    {
+                        IdUsuario = (int)readerReload["id_usuario"],
+                        Nombres = readerReload["nombres"].ToString(),
+                        Apellidos = readerReload["apellidos"].ToString(),
+                        Correo = readerReload["correo"].ToString(),
+                        Telefono = readerReload["telefono"].ToString(),
+                        Direccion = readerReload["direccion"].ToString(),
+                        Foto = readerReload["foto"].ToString(),
+                        IdRol = (int)readerReload["id_rol"],
+                        NombreRol = readerReload["nombre_rol"].ToString(),
+                        Clave = readerReload["clave"].ToString()
+                    };
+                }
+            }
+
+            if (usuario != null)
+            {
+                await SignInUser(usuario);
+                return RedirectToAction("Index", "Home");
             }
 
             return RedirectToAction("Login", new { message = "Cuenta registrada exitosamente" });
@@ -146,7 +175,7 @@ namespace IntiGuard.Controllers
                 using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
                 {
                     conn.Open();
-                    var checkCmd = new SqlCommand("SELECT * FROM usuario WHERE correo=@Correo", conn);
+                    var checkCmd = new SqlCommand("SELECT u.*, r.nombre_rol FROM usuario u INNER JOIN rol r ON u.id_rol=r.id_rol WHERE correo=@Correo", conn);
                     checkCmd.Parameters.AddWithValue("@Correo", email);
 
                     using (var reader = checkCmd.ExecuteReader())
@@ -165,7 +194,7 @@ namespace IntiGuard.Controllers
                                     ? foto
                                     : reader["foto"].ToString(),
                                 IdRol = (int)reader["id_rol"],
-                                NombreRol = reader["id_rol"].ToString(),
+                                NombreRol = reader["nombre_rol"].ToString(),
                                 Clave = reader["clave"].ToString()
                             };
                         }
@@ -188,8 +217,6 @@ namespace IntiGuard.Controllers
 
             return RedirectToAction("Login");
         }
-
-
 
         // ----------------------------------- Completar perfil -----------------------------------
         [HttpGet]
@@ -268,7 +295,7 @@ namespace IntiGuard.Controllers
                     cmd.ExecuteNonQuery();
                 }
 
-                var reloadCmd = new SqlCommand("SELECT TOP 1 * FROM usuario WHERE correo=@Correo", conn);
+                var reloadCmd = new SqlCommand("SELECT TOP 1 u.*, r.nombre_rol FROM usuario u INNER JOIN rol r ON u.id_rol=r.id_rol WHERE correo=@Correo", conn);
                 reloadCmd.Parameters.AddWithValue("@Correo", model.Correo);
                 using var readerReload = reloadCmd.ExecuteReader();
                 if (readerReload.Read())
@@ -283,21 +310,18 @@ namespace IntiGuard.Controllers
                         Direccion = readerReload["direccion"].ToString(),
                         Foto = readerReload["foto"].ToString(),
                         IdRol = (int)readerReload["id_rol"],
-                        NombreRol = readerReload["id_rol"].ToString()
+                        NombreRol = readerReload["nombre_rol"].ToString()
                     };
                 }
             }
-            /*
+
             if (usuario != null)
             {
                 await SignInUser(usuario);
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Login");*/
-
-            return RedirectToAction("Login", new { message = "Cuenta registrada exitosamente" });
-
+            return RedirectToAction("Login");
         }
 
         // ----------------------------------- Access Denied -----------------------------------
@@ -325,5 +349,82 @@ namespace IntiGuard.Controllers
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
+
+        // ----------------------------------- Perfil -----------------------------------
+        /*
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+
+            var model = new
+            {
+                Id = User.FindFirst("Id")?.Value,
+                FullName = User.FindFirst("FullName")?.Value,
+                Nombres = User.FindFirst("Nombres")?.Value,
+                Apellidos = User.FindFirst("Apellidos")?.Value,
+                Correo = User.FindFirst("Correo")?.Value,
+                Telefono = User.FindFirst("Telefono")?.Value,
+                Direccion = User.FindFirst("Direccion")?.Value,
+                Rol = User.FindFirst(ClaimTypes.Role)?.Value,
+                Foto = User.FindFirst("Foto")?.Value
+            };
+
+            return View(model);
+        }*/
+
+        // ----------------------------------- Perfil -----------------------------------
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+
+            var userId = User.FindFirst("Id")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login");
+
+            Usuario usuario = null;
+
+            using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
+            {
+                conn.Open();
+                var cmd = new SqlCommand(@"
+            SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, 
+                   u.direccion, u.foto, u.id_rol, r.nombre_rol
+            FROM usuario u
+            INNER JOIN rol r ON u.id_rol = r.id_rol
+            WHERE u.id_usuario = @Id", conn);
+
+                cmd.Parameters.AddWithValue("@Id", userId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        usuario = new Usuario
+                        {
+                            IdUsuario = (int)reader["id_usuario"],
+                            Nombres = reader["nombres"].ToString(),
+                            Apellidos = reader["apellidos"].ToString(),
+                            Correo = reader["correo"].ToString(),
+                            Telefono = reader["telefono"].ToString(),
+                            Direccion = reader["direccion"].ToString(),
+                            Foto = reader["foto"].ToString(),
+                            IdRol = (int)reader["id_rol"],
+                            NombreRol = reader["nombre_rol"].ToString()
+                        };
+                    }
+                }
+            }
+
+            if (usuario == null)
+                return RedirectToAction("Login");
+
+            return View(usuario);
+        }
+
+
     }
 }

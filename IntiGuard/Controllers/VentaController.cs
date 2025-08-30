@@ -1,8 +1,9 @@
-﻿using IntiGuard.Models;
+﻿using IntiGuard.Helpers;
+using IntiGuard.Models;
 using IntiGuard.Repositories.Interfaces;
 using IntiGuard.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using IntiGuard.Helpers;
+using System.Globalization;
 
 namespace IntiGuard.Controllers
 {
@@ -89,20 +90,28 @@ namespace IntiGuard.Controllers
         public IActionResult Carrito()
         {
             var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
+
+            ViewBag.Productos = _productoCrud.GetAll();
+
             return View(carrito);
         }
 
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ConfirmarCompra()
         {
             var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito");
 
-            Console.WriteLine($"Este es el carrito : {carrito.Count}");
-
             if (carrito == null || !carrito.Any())
                 return RedirectToAction("Carrito");
 
-            int idUsuario = int.Parse(User.FindFirst("Id").Value);
+            var claimId = User.FindFirst("Id")?.Value;
+            if (!int.TryParse(claimId, out int idUsuario))
+            {
+                TempData["Error"] = "Usuario no autenticado correctamente.";
+                return RedirectToAction("Carrito");
+            }
 
             var venta = new Venta
             {
@@ -111,11 +120,7 @@ namespace IntiGuard.Controllers
                 Total = carrito.Sum(c => c.PrecioUnitario * c.Cantidad)
             };
 
-            Console.WriteLine($"Este es la venta crea : {venta.Total}");
-
             bool ok = _ventaService.RegistrarVenta(venta, carrito);
-
-            Console.WriteLine($"Este es el bool de la venta : {ok}");
 
             if (ok)
             {
@@ -124,7 +129,7 @@ namespace IntiGuard.Controllers
                 var comprobante = _ventaService.GenerarComprobante(venta);
 
                 TempData["Detalles"] = Newtonsoft.Json.JsonConvert.SerializeObject(carrito);
-                TempData["Total"] = venta.Total.ToString();
+                TempData["Total"] = venta.Total.ToString(CultureInfo.InvariantCulture);
 
                 return RedirectToAction("Details", "Comprobante", new { id = comprobante.IdComprobante });
             }
@@ -132,5 +137,50 @@ namespace IntiGuard.Controllers
             TempData["Error"] = "No se pudo completar la compra.";
             return RedirectToAction("Carrito");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ActualizarCantidad(int idProducto)
+        {
+            var qtyStr = Request.Form["cantidad"].FirstOrDefault();
+            if (!int.TryParse(qtyStr?.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int cantidad) || cantidad < 1)
+            {
+                cantidad = 1;
+            }
+
+            var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
+            var item = carrito.FirstOrDefault(c => c.IdProducto == idProducto);
+            if (item != null)
+            {
+                var producto = _productoCrud.GetById(idProducto);
+                if (producto != null && producto.Stock < cantidad)
+                {
+                    cantidad = producto.Stock;
+                    TempData["Error"] = $"Stock insuficiente para {producto.NombreProducto}. Se ajustó la cantidad a {cantidad}.";
+                }
+
+                item.Cantidad = cantidad;
+                HttpContext.Session.SetObject("Carrito", carrito);
+            }
+
+            return RedirectToAction("Carrito");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarDelCarrito(int idProducto)
+        {
+            var carrito = HttpContext.Session.GetObject<List<DetalleVenta>>("Carrito") ?? new List<DetalleVenta>();
+
+            var removed = carrito.RemoveAll(c => c.IdProducto == idProducto);
+            if (removed > 0)
+            {
+                HttpContext.Session.SetObject("Carrito", carrito);
+            }
+
+            return RedirectToAction("Carrito");
+        }
+
+
     }
 }
