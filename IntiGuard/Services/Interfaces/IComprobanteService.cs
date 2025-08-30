@@ -7,5 +7,6 @@ namespace IntiGuard.Services.Interfaces
         IEnumerable<Comprobante> GetAll();
         Comprobante GetById(int id);
         (Comprobante comprobante, decimal? total, IEnumerable<DetalleVenta>? detalles) GetDetails(int id, object? tempData);
+        (Comprobante comprobante, decimal? total, IEnumerable<DetalleVenta>? detalles) GetDetailsAdmin(int id);
     }
 }

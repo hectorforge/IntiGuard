@@ -4,42 +4,59 @@
     ViewData["Title"] = "Listado de Comprobantes";
 }
 
-<h2>Listado de Comprobantes</h2>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">
+                <i class="bi bi-file-earmark-text"></i> Listado de Comprobantes
+            </h3>
+            <span class="badge bg-light text-dark">
+                Total registros: @Model.Count()
+            </span>
+        </div>
 
-<table class="table table-bordered table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th>ID</th>
-            <th>Tipo</th>
-            <th>Número</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            foreach (var item in Model)
-            {
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
                         <tr>
-                            <td>@item.IdComprobante</td>
-                            <td>@item.TipoComprobante</td>
-                            <td>@item.NumeroComprobante</td>
-                            <td>
-                                <a class="btn btn-sm btn-info"
-                                   asp-controller="Comprobante"
-                                   asp-action="Details"
-                                   asp-route-id="@item.IdComprobante">
-                                    Ver Detalles
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Número</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
-            }
-        }
-        else
-        {
-                <tr>
-                    <td colspan="4" class="text-center">No se encontraron comprobantes.</td>
-                </tr>
-        }
-    </tbody>
-</table>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.IdComprobante</td>
+                                    <td>@item.TipoComprobante</td>
+                                    <td>@item.NumeroComprobante</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-outline-dark"
+                                           asp-controller="Comprobante"
+                                           asp-action="DetailsAdmin"
+                                           asp-route-id="@item.IdComprobante">
+                                            <i class="bi bi-eye"></i> Ver detalle
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">
+                                    <i class="bi bi-exclamation-circle"></i> No se encontraron comprobantes.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

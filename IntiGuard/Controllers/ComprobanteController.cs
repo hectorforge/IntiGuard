@@ -49,6 +49,19 @@ namespace IntiGuard.Controllers
             return View(comprobante);
         }
 
+        public IActionResult DetailsAdmin(int id)
+        {
+            var (comprobante, total, detalles) = _comprobanteService.GetDetailsAdmin(id);
+            if (comprobante == null) return NotFound();
+
+            ViewBag.Detalles = detalles;
+            ViewBag.Total = total ?? 0;
+
+            return View(comprobante);
+        }
+
+
+
 
     }
 }

@@ -1,0 +1,101 @@
+﻿@model IntiGuard.Models.Comprobante
+
+@{
+    ViewData["Title"] = "Comprobante (Admin)";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-white border-bottom py-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h2 class="fw-bold text-primary mb-1">IntiGuard</h2>
+                            <p class="mb-0 text-muted">Soluciones de seguridad innovadoras</p>
+                            <p class="mb-0 text-muted">www.intiguard.com</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h5 class="fw-bold text-dark mb-1">Comprobante Administrativo</h5>
+                            <p class="mb-0"><strong>Fecha de emisión:</strong> @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body px-5 py-4">
+
+                    <h6 class="fw-bold text-secondary mb-3">Datos del Comprobante</h6>
+                    <table class="table table-sm table-bordered mb-4">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light" style="width:30%;">ID</th>
+                                <td>@Model.IdComprobante</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Tipo</th>
+                                <td>@Model.TipoComprobante</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Número</th>
+                                <td>@Model.NumeroComprobante</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    @if (ViewBag.Detalles != null)
+                    {
+                        <h6 class="fw-bold text-secondary mb-3">Detalle de Productos</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-end">Precio Unit.</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var d in ViewBag.Detalles)
+                                    {
+                                        <tr>
+                                            <td>@d.NombreProducto</td>
+                                            <td class="text-center">@d.Cantidad</td>
+                                            <td class="text-end">@d.PrecioUnitario.ToString("C")</td>
+                                            <td class="text-end">@((d.Cantidad * d.PrecioUnitario).ToString("C"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    <div class="row justify-content-end mt-4">
+                        <div class="col-md-5">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th class="bg-light text-end" style="width:50%;">Total</th>
+                                        <td class="fw-bold text-primary text-end">
+                                            @(ViewBag.Total != null ? string.Format("{0:C}", ViewBag.Total) : "0.00")
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light text-center py-3 d-print-none">
+                    <a asp-controller="Comprobante" asp-action="Index" class="btn btn-outline-primary me-2">
+                        <i class="bi bi-arrow-left-circle"></i> Volver a Comprobantes
+                    </a>
+                    <button onclick="window.print()" class="btn btn-primary">
+                        <i class="bi bi-printer"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
