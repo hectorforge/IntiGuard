@@ -90,7 +90,7 @@ GO
 -- ========================================
 -- Crear usuario
 
-CREATE PROCEDURE dbo.sp_usuario_create
+CREATE PROCEDURE sp_usuario_create
     @nombres VARCHAR(100),
     @apellidos VARCHAR(100),
     @correo VARCHAR(100),

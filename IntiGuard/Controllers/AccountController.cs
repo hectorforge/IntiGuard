@@ -100,7 +100,7 @@ namespace IntiGuard.Controllers
             using (var conn = new SqlConnection(_config.GetConnectionString("IntiGuardDB")))
             {
                 conn.Open();
-                var checkCmd = new SqlCommand("SELECT * FROM usuario WHERE correo=@Correo", conn);
+                var checkCmd = new SqlCommand("SELECT * FROM usuario WHERE correo = @Correo", conn);
                 checkCmd.Parameters.AddWithValue("@Correo", model.Correo);
 
                 using (var reader = checkCmd.ExecuteReader())
@@ -124,6 +124,8 @@ namespace IntiGuard.Controllers
                 insertCmd.Parameters.AddWithValue("@foto", model.Foto ?? "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg");
                 insertCmd.Parameters.AddWithValue("@clave", hashedPassword);
                 insertCmd.Parameters.AddWithValue("@id_rol", model.IdRol ?? 2);
+                insertCmd.Parameters.AddWithValue("@activo", true); //agregado ultimo
+
                 insertCmd.ExecuteNonQuery();
 
                 var reloadCmd = new SqlCommand("SELECT TOP 1 u.*, r.nombre_rol FROM usuario u INNER JOIN rol r ON u.id_rol=r.id_rol WHERE correo=@Correo", conn);
@@ -261,7 +263,7 @@ namespace IntiGuard.Controllers
             {
                 conn.Open();
 
-                var checkCmd = new SqlCommand("SELECT COUNT(*) FROM usuario WHERE correo=@Correo", conn);
+                var checkCmd = new SqlCommand("SELECT COUNT(*) FROM usuario WHERE correo = @Correo", conn);
                 checkCmd.Parameters.AddWithValue("@Correo", model.Correo);
                 int count = (int)checkCmd.ExecuteScalar();
 
@@ -281,6 +283,7 @@ namespace IntiGuard.Controllers
                     insertCmd.Parameters.AddWithValue("@foto", model.Foto ?? "https://thumbs.dreamstime.com/b/vector-de-perfil-avatar-predeterminado-foto-usuario-redes-sociales-desconocida-icono-desconocido-en-184816085.jpg");
                     insertCmd.Parameters.AddWithValue("@clave", hashedPassword);
                     insertCmd.Parameters.AddWithValue("@id_rol", model.IdRol ?? 2);
+                    insertCmd.Parameters.AddWithValue("@activo", true); //agregado ultimo
                     insertCmd.ExecuteNonQuery();
                 }
                 else
