@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Contacto";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-5" data-aos="fade-down">
+        <h1 class="fw-bold text-primary">
+            <i class="bi bi-headset"></i> Contáctanos
+        </h1>
+        <p class="text-muted fs-5">Estamos disponibles para ayudarte en todo momento</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="card shadow-lg border-0 p-4 h-100 rounded-4">
+                <i class="bi bi-telephone-fill fs-1 text-success mb-3"></i>
+                <h5 class="fw-bold">Teléfonos</h5>
+                <p class="mb-1">+51 987 654 321</p>
+                <p class="mb-0">+51 912 345 678</p>
+                <small class="text-muted">Lunes - Viernes (8am - 6pm)</small>
+            </div>
+        </div>
+
+        <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="card shadow-lg border-0 p-4 h-100 rounded-4">
+                <i class="bi bi-envelope-fill fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold">Correo electrónico</h5>
+                <p class="mb-1">contacto@intigard.com</p>
+                <p class="mb-0">soporte@intigard.com</p>
+                <small class="text-muted">Atención 24/7</small>
+            </div>
+        </div>
+
+        <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="300">
+            <div class="card shadow-lg border-0 p-4 h-100 rounded-4">
+                <i class="bi bi-geo-alt-fill fs-1 text-danger mb-3"></i>
+                <h5 class="fw-bold">Dirección</h5>
+                <p class="mb-1">Av. Siempre Viva 123</p>
+                <p class="mb-0">Ciudad - País</p>
+                <small class="text-muted">Oficina Central</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5" data-aos="zoom-in">
+        <h4 class="fw-bold mb-3">Síguenos en redes sociales</h4>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="https://facebook.com" target="_blank" class="btn btn-outline-primary rounded-circle" style="width:55px;height:55px;">
+                <i class="bi bi-facebook fs-4"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" class="btn btn-outline-danger rounded-circle" style="width:55px;height:55px;">
+                <i class="bi bi-instagram fs-4"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" class="btn btn-outline-info rounded-circle" style="width:55px;height:55px;">
+                <i class="bi bi-twitter fs-4"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="btn btn-outline-dark rounded-circle" style="width:55px;height:55px;">
+                <i class="bi bi-linkedin fs-4"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-5" data-aos="fade-up">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18..."
+                    width="100%" height="350" style="border:0;"
+                    allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+</script>

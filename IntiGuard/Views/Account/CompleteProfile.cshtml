@@ -6,30 +6,40 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title mb-4 text-center">Completar Perfil</h3>
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-4 text-center fw-bold text-primary">
+                        <i class="bi bi-person-badge-fill"></i> Completar Perfil
+                    </h3>
 
                     <div class="text-center mb-3">
-                        <img src="@Model.Foto" alt="Foto de perfil" class="rounded-circle" style="width:100px;height:100px;object-fit:cover;">
+                        <img src="@Model.Foto" alt="Foto de perfil"
+                             class="rounded-circle shadow-sm border"
+                             style="width:100px;height:100px;object-fit:cover;">
                     </div>
 
-                    <form asp-action="CompleteProfile" method="post">
+                    <form asp-action="CompleteProfile" method="post" novalidate>
                         <input type="hidden" asp-for="Correo" />
 
                         <div class="mb-3">
                             <label asp-for="Nombres" class="form-label">Nombres</label>
-                            <input asp-for="Nombres" class="form-control" required />
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                <input asp-for="Nombres" class="form-control" required />
+                            </div>
                             <span asp-validation-for="Nombres" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Apellidos" class="form-label">Apellidos</label>
-
-                            @Html.TextBoxFor(m => m.Apellidos, new {
-                            @class = "form-control", required = (Model.Apellidos == "Desconocido") ? "required" : null})
-
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-people-fill"></i></span>
+                                @Html.TextBoxFor(m => m.Apellidos, new {
+                                @class = "form-control",
+                                                                required = (Model.Apellidos == "Desconocido") ? "required" : null
+                                                                })
+                            </div>
                             @if (Model.Apellidos == "Desconocido")
                             {
                                 <small class="text-muted">Por favor ingresa tu apellido.</small>
@@ -37,16 +47,21 @@
                             <span asp-validation-for="Apellidos" class="text-danger"></span>
                         </div>
 
-
                         <div class="mb-3">
                             <label asp-for="Telefono" class="form-label">Teléfono</label>
-                            <input asp-for="Telefono" class="form-control" required/>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                                <input asp-for="Telefono" class="form-control" required />
+                            </div>
                             <span asp-validation-for="Telefono" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Direccion" class="form-label">Dirección</label>
-                            <input asp-for="Direccion" class="form-control" required/>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                                <input asp-for="Direccion" class="form-control" required />
+                            </div>
                             <span asp-validation-for="Direccion" class="text-danger"></span>
                         </div>
 
@@ -54,18 +69,28 @@
                         {
                             <div class="mb-3">
                                 <label asp-for="Foto" class="form-label">Nueva URL de Foto</label>
-                                <input asp-for="Foto" class="form-control" placeholder="Ingresa la URL de tu foto" />
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-image-fill"></i></span>
+                                    <input asp-for="Foto" class="form-control" placeholder="https://ejemplo.com/imagen.jpg" />
+                                </div>
                                 <span asp-validation-for="Foto" class="text-danger"></span>
+                                <div class="form-text">Opcional</div>
                             </div>
                         }
 
                         <div class="mb-3">
-                            <label asp-for="Clave" class="form-label">Contraseña ( Para el sistema )</label>
-                            <input asp-for="Clave" class="form-control" type="password" required />
+                            <label asp-for="Clave" class="form-label">Contraseña (para el sistema)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                <input asp-for="Clave" class="form-control" type="password" required minlength="6" />
+                            </div>
                             <span asp-validation-for="Clave" class="text-danger"></span>
+                            <div class="form-text">Mínimo 6 caracteres.</div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-check-circle-fill"></i> Guardar Cambios
+                        </button>
                     </form>
                 </div>
             </div>
