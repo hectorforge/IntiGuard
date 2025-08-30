@@ -1,5 +1,6 @@
 ﻿using IntiGuard.Models;
 using IntiGuard.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -35,6 +36,7 @@ namespace IntiGuard.Controllers
             return roles;
         }
 
+        [Authorize(Roles = "ADMIN")]
         public IActionResult Index()
         {
             var usuarios = _usuarioCrud.GetAll();

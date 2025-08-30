@@ -12,7 +12,8 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Email</th>
-            
+            <th>Telefono</th>
+			<th>Activo</th>
             <th>Rol</th>
             <th>Acciones</th>
         </tr>
@@ -25,6 +26,8 @@
                 <td>@usuario.Nombres</td>
                 <td>@usuario.Apellidos</td>
                 <td>@usuario.Correo</td>
+                <td>@usuario.Telefono</td>
+                <td>@usuario.Activo</td>
                 <td>@usuario.NombreRol</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@usuario.IdUsuario" class="btn btn-sm btn-warning">
