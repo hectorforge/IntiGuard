@@ -98,13 +98,14 @@ CREATE PROCEDURE dbo.sp_usuario_create
     @direccion VARCHAR(100),
     @foto TEXT,
     @clave VARCHAR(255),
-    @id_rol INT  
+    @id_rol INT,
+	@activo BIT  
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO dbo.usuario (nombres, apellidos, correo, telefono, direccion, foto, clave, id_rol)
-    VALUES (@nombres, @apellidos, @correo, @telefono, @direccion, @foto, @clave, @id_rol);
+    INSERT INTO dbo.usuario (nombres, apellidos, correo, telefono, direccion, foto, clave, id_rol, activo)
+    VALUES (@nombres, @apellidos, @correo, @telefono, @direccion, @foto, @clave, @id_rol, @activo);
 END
 GO
 
@@ -571,43 +572,3 @@ UPDATE producto SET
     imagen_url = '/assets/img/portfolio/15.jpg'
 WHERE id_producto = 15;
 
--- ACTUALIZAR PROCEDURE DE USUARIO CREATE
-
-ALTER PROCEDURE sp_usuario_create
-    @nombres NVARCHAR(100),
-    @apellidos NVARCHAR(100),
-    @correo NVARCHAR(150),
-    @telefono NVARCHAR(20),
-    @direccion NVARCHAR(200),
-    @foto NVARCHAR(200),
-    @clave NVARCHAR(200),
-    @id_rol INT,
-    @activo BIT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Usuario (
-        Nombres,
-        Apellidos,
-        Correo,
-        Telefono,
-        Direccion,
-        Foto,
-        Clave,
-        id_rol,
-        Activo
-    )
-    VALUES (
-        @nombres,
-        @apellidos,
-        @correo,
-        @telefono,
-        @direccion,
-        @foto,
-        @clave,
-        @id_rol,
-        @activo
-    );
-END;
-GO
