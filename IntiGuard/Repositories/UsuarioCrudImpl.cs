@@ -31,9 +31,9 @@ namespace IntiGuard.Repositories
                 cmd.Parameters.AddWithValue("@telefono", usuario.Telefono ?? "");
                 cmd.Parameters.AddWithValue("@direccion", usuario.Direccion ?? "");
                 cmd.Parameters.AddWithValue("@foto", usuario.Foto ?? "");
-                cmd.Parameters.AddWithValue("@activo", usuario.Activo);
                 cmd.Parameters.AddWithValue("@clave", usuario.Clave ?? "");
                 cmd.Parameters.AddWithValue("@id_rol", usuario.IdRol ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@activo", usuario.Activo);
 
                 cmd.ExecuteNonQuery();
 
