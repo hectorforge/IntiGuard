@@ -117,7 +117,6 @@ namespace IntiGuard.Controllers
                 insertCmd.Parameters.AddWithValue("@id_rol", model.IdRol ?? 2);
                 insertCmd.ExecuteNonQuery();
 
-                // Traemos el usuario recién insertado
                 var reloadCmd = new SqlCommand("SELECT TOP 1 u.*, r.nombre_rol FROM usuario u INNER JOIN rol r ON u.id_rol=r.id_rol WHERE correo=@Correo", conn);
                 reloadCmd.Parameters.AddWithValue("@Correo", model.Correo);
                 using var readerReload = reloadCmd.ExecuteReader();
@@ -351,30 +350,6 @@ namespace IntiGuard.Controllers
         }
 
         // ----------------------------------- Perfil -----------------------------------
-        /*
-        [HttpGet]
-        public IActionResult Profile()
-        {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login");
-
-            var model = new
-            {
-                Id = User.FindFirst("Id")?.Value,
-                FullName = User.FindFirst("FullName")?.Value,
-                Nombres = User.FindFirst("Nombres")?.Value,
-                Apellidos = User.FindFirst("Apellidos")?.Value,
-                Correo = User.FindFirst("Correo")?.Value,
-                Telefono = User.FindFirst("Telefono")?.Value,
-                Direccion = User.FindFirst("Direccion")?.Value,
-                Rol = User.FindFirst(ClaimTypes.Role)?.Value,
-                Foto = User.FindFirst("Foto")?.Value
-            };
-
-            return View(model);
-        }*/
-
-        // ----------------------------------- Perfil -----------------------------------
         [HttpGet]
         public IActionResult Profile()
         {
@@ -424,7 +399,5 @@ namespace IntiGuard.Controllers
 
             return View(usuario);
         }
-
-
     }
 }
