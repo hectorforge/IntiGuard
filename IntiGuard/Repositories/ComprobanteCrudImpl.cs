@@ -13,25 +13,17 @@ namespace IntiGuard.Repositories
         {
             _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
-
-        public int InsertComprobanteTransaccion(Comprobante comprobante, SqlConnection connection, SqlTransaction transaction)
+        public int InsertComprobanteTransaccion(Comprobante comprobante, SqlConnection conn, SqlTransaction transaction)
         {
-            using var cmd = new SqlCommand("sp_comprobante_insert", connection, transaction);
+            using var cmd = new SqlCommand("sp_comprobante_insert", conn, transaction);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@TipoComprobante", comprobante.TipoComprobante);
-            cmd.Parameters.AddWithValue("@NumeroComprobante", comprobante.NumeroComprobante);
+            cmd.Parameters.AddWithValue("@tipo_comprobante", comprobante.TipoComprobante);
+            cmd.Parameters.AddWithValue("@numero_comprobante", comprobante.NumeroComprobante);
 
-            var idParam = new SqlParameter("@IdComprobante", SqlDbType.Int)
-            {
-                Direction = ParameterDirection.Output
-            };
-            cmd.Parameters.Add(idParam);
-
-            cmd.ExecuteNonQuery();
-
-            return (int)idParam.Value;
+            return Convert.ToInt32(cmd.ExecuteScalar());
         }
+
 
         public Comprobante Create(Comprobante entity)
         {

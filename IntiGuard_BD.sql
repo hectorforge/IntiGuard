@@ -338,6 +338,20 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE sp_comprobante_insert
+    @tipo_comprobante VARCHAR(50),
+    @numero_comprobante VARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO comprobante (tipo_comprobante, numero_comprobante)
+    VALUES (@tipo_comprobante, @numero_comprobante);
+
+    -- Devolver el id generado
+    SELECT SCOPE_IDENTITY() AS id_comprobante;
+END
+GO
 
 -- ========================================
 -- CONSULTAS DETALLE VENTA

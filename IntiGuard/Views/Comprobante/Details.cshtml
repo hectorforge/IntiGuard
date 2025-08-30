@@ -39,7 +39,6 @@
 
                     <hr />
 
-                    <!-- Placeholder para mostrar detalles de la venta (si los envías desde el controller) -->
                     @if (ViewBag.Detalles != null)
                     {
                         <h5 class="fw-bold text-dark">Detalle de Productos</h5>
@@ -47,6 +46,7 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>Imagen</th>
                                         <th>Producto</th>
                                         <th>Cantidad</th>
                                         <th>Precio Unit.</th>
@@ -57,13 +57,17 @@
                                     @foreach (var d in ViewBag.Detalles)
                                     {
                                         <tr>
+                                            <td>
+                                                <img src="@d.ImagenUrl" alt="@d.NombreProducto" width="60" class="img-thumbnail" />
+                                            </td>
                                             <td>@d.NombreProducto</td>
                                             <td>@d.Cantidad</td>
                                             <td>@d.PrecioUnitario.ToString("C")</td>
-                                            <td>@(d.Cantidad* d.PrecioUnitario).ToString("C")</td>
+                                            <td>@((d.Cantidad * d.PrecioUnitario).ToString("C"))</td>
                                         </tr>
                                     }
                                 </tbody>
+
                             </table>
                         </div>
                     }

@@ -38,7 +38,7 @@
                         <td>@item.IdProducto</td>
                         <td>@item.Cantidad</td>
                         <td>@item.PrecioUnitario.ToString("C")</td>
-                        <td>@(item.Cantidad* item.PrecioUnitario).ToString("C")</td>
+                        <td>@((item.Cantidad * item.PrecioUnitario).ToString("C"))</td>
                     </tr>
                 }
             </tbody>

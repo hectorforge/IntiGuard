@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;// For Decimal
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace IntiGuard.Models

@@ -36,10 +36,8 @@ namespace IntiGuard.Services.Implements
 
             try
             {
-                // Insertar venta
                 int idVenta = _ventaCrud.InsertVentaTransaccion(venta, conn, transaction);
 
-                // Insertar detalles y actualizar stock
                 foreach (var detalle in detalles)
                 {
                     detalle.IdVenta = idVenta;
@@ -47,7 +45,6 @@ namespace IntiGuard.Services.Implements
                     _productoCrud.DescontarStockTransaccion(detalle.IdProducto, detalle.Cantidad, conn, transaction);
                 }
 
-                // Generar comprobante
                 var comprobante = new Comprobante
                 {
                     TipoComprobante = "Boleta",
@@ -56,7 +53,6 @@ namespace IntiGuard.Services.Implements
 
                 int idComprobante = _comprobanteCrud.InsertComprobanteTransaccion(comprobante, conn, transaction);
 
-                // Vincular comprobante a la venta
                 venta.IdVenta = idVenta;
                 venta.IdComprobante = idComprobante;
 

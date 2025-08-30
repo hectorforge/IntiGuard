@@ -162,7 +162,7 @@ namespace IntiGuard.Controllers
                                 Telefono = reader["telefono"].ToString(),
                                 Direccion = reader["direccion"].ToString(),
                                 Foto = string.IsNullOrEmpty(reader["foto"].ToString())
-                                    ? foto // FIX: si en BD está vacío, usamos la de Google o default
+                                    ? foto
                                     : reader["foto"].ToString(),
                                 IdRol = (int)reader["id_rol"],
                                 NombreRol = reader["id_rol"].ToString(),
@@ -188,6 +188,8 @@ namespace IntiGuard.Controllers
 
             return RedirectToAction("Login");
         }
+
+
 
         // ----------------------------------- Completar perfil -----------------------------------
         [HttpGet]
@@ -285,14 +287,17 @@ namespace IntiGuard.Controllers
                     };
                 }
             }
-
+            /*
             if (usuario != null)
             {
                 await SignInUser(usuario);
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Login");*/
+
+            return RedirectToAction("Login", new { message = "Cuenta registrada exitosamente" });
+
         }
 
         // ----------------------------------- Access Denied -----------------------------------
@@ -303,6 +308,7 @@ namespace IntiGuard.Controllers
         {
             var claims = new List<Claim>
             {
+                new Claim("Id", usuario.IdUsuario.ToString()),
                 new Claim(ClaimTypes.Name, usuario.Correo),
                 new Claim(ClaimTypes.Role, usuario.NombreRol ?? "User"),
                 new Claim("FullName", $"{usuario.Nombres} {usuario.Apellidos}"),

@@ -58,7 +58,6 @@ namespace IntiGuard.Controllers
             return View(venta);
         }
 
-        // uso de SessionExtensions en Helpers
         [HttpPost]
         public IActionResult AgregarAlCarrito(int idProducto, int cantidad)
         {
@@ -103,9 +102,11 @@ namespace IntiGuard.Controllers
             if (carrito == null || !carrito.Any())
                 return RedirectToAction("Carrito");
 
+            int idUsuario = int.Parse(User.FindFirst("Id").Value);
+
             var venta = new Venta
             {
-                IdUsuario = 1,
+                IdUsuario = idUsuario,
                 IdComprobante = 2,
                 Total = carrito.Sum(c => c.PrecioUnitario * c.Cantidad)
             };
@@ -123,7 +124,7 @@ namespace IntiGuard.Controllers
                 var comprobante = _ventaService.GenerarComprobante(venta);
 
                 TempData["Detalles"] = Newtonsoft.Json.JsonConvert.SerializeObject(carrito);
-                TempData["Total"] = venta.Total;
+                TempData["Total"] = venta.Total.ToString();
 
                 return RedirectToAction("Details", "Comprobante", new { id = comprobante.IdComprobante });
             }

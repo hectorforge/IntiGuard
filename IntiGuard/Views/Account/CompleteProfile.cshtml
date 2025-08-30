@@ -40,13 +40,13 @@
 
                         <div class="mb-3">
                             <label asp-for="Telefono" class="form-label">Teléfono</label>
-                            <input asp-for="Telefono" class="form-control" />
+                            <input asp-for="Telefono" class="form-control" required/>
                             <span asp-validation-for="Telefono" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Direccion" class="form-label">Dirección</label>
-                            <input asp-for="Direccion" class="form-control" />
+                            <input asp-for="Direccion" class="form-control" required/>
                             <span asp-validation-for="Direccion" class="text-danger"></span>
                         </div>
 
@@ -61,7 +61,7 @@
 
                         <div class="mb-3">
                             <label asp-for="Clave" class="form-label">Contraseña ( Para el sistema )</label>
-                            <input asp-for="Clave" class="form-control" type="password" />
+                            <input asp-for="Clave" class="form-control" type="password" required />
                             <span asp-validation-for="Clave" class="text-danger"></span>
                         </div>
 

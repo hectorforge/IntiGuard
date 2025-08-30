@@ -83,7 +83,6 @@ namespace IntiGuard.Repositories
             return GetById(id) != null;
         }
 
-        // Para las transacciones
         public int InsertVentaTransaccion(Venta venta, SqlConnection connection, SqlTransaction transaction)
         {
             using var cmd = new SqlCommand("sp_venta_create_transaccion", connection, transaction);
