@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IntiGuard.Models.Producto>
+﻿@model IntiGuard.ViewModels.PagedResult<IntiGuard.Models.Producto>
 
 @{
     ViewData["Title"] = "Productos";
@@ -15,50 +15,100 @@
     }
 </div>
 
-<div class="row">
-    @foreach (var producto in Model)
+@if (User.IsInRole("ADMIN"))
+{
+    <!-- VISTA TIPO TABLA PARA ADMIN -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <img src="@(!string.IsNullOrEmpty(producto.ImagenUrl) ? Url.Content(producto.ImagenUrl) : Url.Content("~/images/no-image.png"))"
+                                 alt="@producto.NombreProducto"
+                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;" />
+                        </td>
+                        <td>@producto.NombreProducto</td>
+                        <td>@producto.Marca</td>
+                        <td class="fw-bold text-primary">@producto.Precio.ToString("C")</td>
+                        <td>@producto.Stock</td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-warning me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    @if (Model.TotalPages > 1)
     {
-        <div class="col-md-4 col-lg-3 mb-4">
-            <div class="card product-card h-100">
-                <!-- Imagen con efecto zoom -->
-                <img src="@(!string.IsNullOrEmpty(producto.ImagenUrl) ? Url.Content(producto.ImagenUrl) : Url.Content("~/images/no-image.png"))"
-                     class="card-img-top"
-                     alt="@producto.NombreProducto" />
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)">Anterior</a>
+                </li>
 
-                <!-- Cuerpo -->
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-dark fw-bold">@producto.NombreProducto</h5>
-                    <p class="text-muted mb-1">@producto.Marca</p>
-                    <p class="small flex-grow-1">@producto.Descripcion</p>
-                    <p class="fw-bold text-primary fs-5">@producto.Precio.ToString("C")</p>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
 
-                    @if (User.IsInRole("ADMIN"))
-                    {
-                        <p class="text-muted small">Stock: @producto.Stock</p>
-                    }
-                </div>
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <!-- VISTA TIPO CARDS PARA USUARIOS NORMALES -->
+    <div class="row">
+        @foreach (var producto in Model.Items)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card product-card h-100">
+                    <img src="@(!string.IsNullOrEmpty(producto.ImagenUrl) ? Url.Content(producto.ImagenUrl) : Url.Content("~/images/no-image.png"))"
+                         class="card-img-top"
+                         alt="@producto.NombreProducto" />
 
-                <!-- Footer con acciones -->
-                <div class="card-footer bg-light text-center">
-                    <a asp-action="Details" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-eye"></i> Ver
-                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-dark fw-bold">@producto.NombreProducto</h5>
+                        <p class="text-muted mb-1">@producto.Marca</p>
+                        <p class="small flex-grow-1">@producto.Descripcion</p>
+                        <p class="fw-bold text-primary fs-5">@producto.Precio.ToString("C")</p>
+                    </div>
 
-                    @if (User.IsInRole("ADMIN"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i>
+                    <div class="card-footer bg-light text-center">
+                        <a asp-action="Details" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i> Ver
                         </a>
-                        <a asp-action="Delete" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-danger">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <!-- Para usuario o visitante -->
+
                         @if (User.Identity.IsAuthenticated && User.IsInRole("USER"))
                         {
-                            <!-- Botón de carrito -->
                             <form asp-controller="Venta" asp-action="AgregarAlCarrito" method="post" class="d-inline">
                                 <input type="hidden" name="idProducto" value="@producto.IdProducto" />
                                 <input type="hidden" name="cantidad" value="1" />
@@ -69,14 +119,13 @@
                         }
                         else
                         {
-                            <!-- Redirigir a Login -->
                             <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-primary">
                                 <i class="bi bi-box-arrow-in-right"></i> Comprar
                             </a>
                         }
-                    }
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}

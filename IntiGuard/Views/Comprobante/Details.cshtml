@@ -82,9 +82,19 @@
                 </div>
 
                 <div class="card-footer bg-light text-center py-3">
-                    <a asp-controller="Producto" asp-action="Index" class="btn btn-outline-primary me-2">
-                        <i class="bi bi-house-door"></i> Seguir Comprando
-                    </a>
+                    @if (User.IsInRole("ADMIN"))
+                    {
+                        <a asp-controller="Comprobante" asp-action="Index" class="btn btn-outline-secondary me-2">
+                            <i class="bi bi-arrow-left-circle"></i> Volver a Comprobantes
+                        </a>
+                    }
+                    else if (User.IsInRole("USER"))
+                    {
+                        <a asp-controller="Producto" asp-action="Index" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-house-door"></i> Seguir Comprando
+                        </a>
+                    }
+
                     <button onclick="window.print()" class="btn btn-success">
                         <i class="bi bi-printer"></i> Imprimir
                     </button>

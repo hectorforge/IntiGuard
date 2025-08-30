@@ -79,7 +79,6 @@
 
                     @if (HttpContextAccessor.HttpContext.User.IsInRole("ADMIN"))
                     {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Producto" asp-action="AdminIndex">Gestionar Productos</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Usuario" asp-action="Index">Usuarios</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Venta" asp-action="Index">Ventas</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Comprobante" asp-action="Index">Comprobantes</a></li>

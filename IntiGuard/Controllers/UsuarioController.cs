@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace IntiGuard.Controllers
 {
+    [Authorize(Roles = "ADMIN")]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioCrud _usuarioCrud;
@@ -17,6 +18,7 @@ namespace IntiGuard.Controllers
             _usuarioCrud = usuarioCrud;
             _connectionString = configuration.GetConnectionString("IntiGuardDB");
         }
+
         private IEnumerable<Rol> GetRoles()
         {
             var roles = new List<Rol>();
@@ -36,7 +38,6 @@ namespace IntiGuard.Controllers
             return roles;
         }
 
-        [Authorize(Roles = "ADMIN")]
         public IActionResult Index()
         {
             var usuarios = _usuarioCrud.GetAll();
@@ -65,6 +66,7 @@ namespace IntiGuard.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Usuario usuario)
         {
             if (ModelState.IsValid)
@@ -92,6 +94,7 @@ namespace IntiGuard.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Usuario usuario)
         {
             if (id != usuario.IdUsuario)
@@ -102,7 +105,7 @@ namespace IntiGuard.Controllers
                 if (!string.IsNullOrEmpty(usuario.Clave))
                     usuario.Clave = BCrypt.Net.BCrypt.HashPassword(usuario.Clave);
                 else
-                    usuario.Clave = null; // no actualizar clave
+                    usuario.Clave = null; // No actualizar clave
 
                 _usuarioCrud.Update(id, usuario);
                 return RedirectToAction(nameof(Index));
@@ -119,12 +122,25 @@ namespace IntiGuard.Controllers
             if (usuario == null)
                 return NotFound();
 
+            if (_usuarioCrud.HasPurchases(id))
+            {
+                TempData["Error"] = "No se puede eliminar el usuario porque tiene compras registradas.";
+                return RedirectToAction(nameof(Index));
+            }
+
             return View(usuario);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            if (_usuarioCrud.HasPurchases(id))
+            {
+                TempData["Error"] = "No se puede eliminar el usuario porque tiene compras registradas.";
+                return RedirectToAction(nameof(Index));
+            }
+
             _usuarioCrud.DeleteById(id);
             return RedirectToAction(nameof(Index));
         }
