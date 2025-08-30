@@ -88,9 +88,8 @@ GO
 -- ========================================
 -- CRUD USUARIO
 -- ========================================
-
 -- Crear usuario
-CREATE PROCEDURE sp_usuario_create
+CREATE OR ALTER PROCEDURE sp_usuario_create
     @nombres VARCHAR(100),
     @apellidos VARCHAR(100),
     @correo VARCHAR(100),
@@ -98,30 +97,33 @@ CREATE PROCEDURE sp_usuario_create
     @direccion VARCHAR(100),
     @foto TEXT,
     @clave VARCHAR(255),
-    @id_rol INT
+    @id_rol INT,
+    @activo BIT
 AS
 BEGIN
-    INSERT INTO usuario (nombres, apellidos, correo,telefono,direccion,foto ,clave, id_rol)
-    VALUES (@nombres, @apellidos, @correo,@telefono,@direccion,@foto ,@clave, @id_rol);
+    INSERT INTO usuario (nombres, apellidos, correo, telefono, direccion, foto, clave, id_rol, activo)
+    VALUES (@nombres, @apellidos, @correo, @telefono, @direccion, @foto, @clave, @id_rol, @activo);
 END
 GO
 
 -- Listar todos los usuarios
-CREATE PROCEDURE sp_usuario_get_all
+CREATE OR ALTER PROCEDURE sp_usuario_get_all
 AS
 BEGIN
-    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo,u.telefono,u.direccion,u.foto ,u.id_rol, r.nombre_rol, u.fecha_registro, u.activo
+    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion, u.foto,
+           u.id_rol, r.nombre_rol, u.fecha_registro, u.activo
     FROM usuario u
     INNER JOIN rol r ON u.id_rol = r.id_rol;
 END
 GO
 
 -- Obtener usuario por ID
-CREATE PROCEDURE sp_usuario_get_by_id
+CREATE OR ALTER PROCEDURE sp_usuario_get_by_id
     @id_usuario INT
 AS
 BEGIN
-    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono,u.direccion,u.foto, u.id_rol, r.nombre_rol, u.fecha_registro, u.activo
+    SELECT u.id_usuario, u.nombres, u.apellidos, u.correo, u.telefono, u.direccion, u.foto,
+           u.id_rol, r.nombre_rol, u.fecha_registro, u.activo
     FROM usuario u
     INNER JOIN rol r ON u.id_rol = r.id_rol
     WHERE u.id_usuario = @id_usuario;
@@ -129,7 +131,7 @@ END
 GO
 
 -- Actualizar usuario
-CREATE PROCEDURE sp_usuario_update
+CREATE OR ALTER PROCEDURE sp_usuario_update
     @id_usuario INT,
     @nombres VARCHAR(100),
     @apellidos VARCHAR(100),
@@ -138,7 +140,8 @@ CREATE PROCEDURE sp_usuario_update
     @direccion VARCHAR(100),
     @foto TEXT,
     @clave VARCHAR(255),
-    @id_rol INT
+    @id_rol INT,
+    @activo BIT
 AS
 BEGIN
     UPDATE usuario
@@ -148,14 +151,15 @@ BEGIN
         telefono = @telefono,
         direccion = @direccion,
         foto = @foto,
-        clave = @clave,
-        id_rol = @id_rol
+        clave = ISNULL(@clave, clave), -- no sobreescribe si viene NULL
+        id_rol = @id_rol,
+        activo = @activo
     WHERE id_usuario = @id_usuario;
 END
 GO
 
 -- Eliminar usuario
-CREATE PROCEDURE sp_usuario_delete
+CREATE OR ALTER PROCEDURE sp_usuario_delete
     @id_usuario INT
 AS
 BEGIN
