@@ -57,7 +57,7 @@
     </div>
 
     <div class="mt-4">
-        <form asp-action="DeleteConfirmed" method="post">
+        <form asp-action="Delete" method="post">
             <input type="hidden" name="id" value="@Model.IdUsuario" />
             <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
             <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar y Volver</a>
